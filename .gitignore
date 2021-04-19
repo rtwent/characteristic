@@ -9,5 +9,5 @@
 /vendor/
 
 /.idea
-/docker/data
+/.docker/data
 ###< symfony/framework-bundle ###
