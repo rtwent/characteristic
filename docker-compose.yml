@@ -1,0 +1,37 @@
+version: '2.2'
+services:
+  chars_nginx:
+    image: nginx:1.19.0-alpine
+    mem_limit: 512M
+    volumes:
+      - ./.docker/conf/nginx/templates:/etc/nginx/templates
+      - ${LOCAL_PROJECT_PATH}:/var/www/html
+    ports:
+      - ${LOCAL_NGINX_PORT}:80
+    environment:
+      - NGINX_HOST=${NGINX_HOST}
+      - NGINX_ROOT_DIR=${NGINX_ROOT_DIR}
+      - NGINX_FAST_CGI_PATH=${NGINX_FAST_CGI_PATH}
+    depends_on:
+      - chars_php
+      - chars_pg
+  chars_php:
+    build: .docker
+    environment:
+      PHP_IDE_CONFIG: ${PHP_IDE_CONFIG}
+    volumes:
+      - ./.docker/conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./.docker/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ${LOCAL_PROJECT_PATH}:/var/www/html
+  chars_pg:
+    image: postgres:10.14
+    mem_limit: 512M
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${LOCAL_POSTGRES_PORT}:5432
+    volumes:
+      - ./.docker/conf/postgres/:/docker-entrypoint-initdb.d/
+      - ./.docker/data/pgsql/:/var/lib/postgresql/data/
