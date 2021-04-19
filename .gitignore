@@ -1,8 +1,3 @@
-# These are some examples of commonly ignored file patterns.
-# You should customize this list as applicable to your project.
-# Learn more about .gitignore:
-#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -12,7 +7,7 @@
 /var/
 /vendor/
 /.idea
-
+/.docker/data
 
 ###< symfony/framework-bundle ###
 
@@ -60,4 +55,3 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
