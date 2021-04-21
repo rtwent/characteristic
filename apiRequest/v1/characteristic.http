@@ -7,7 +7,7 @@ POST {{host}}/characteristic
 Content-Type: application/json
 
 {
-  "attribute": "newattr",
+  "attribute": "newattr2",
   "i18n": {
     "ru": {
       "label": "Новый аттр",

@@ -5,8 +5,9 @@ namespace App\Entity\ValueObjects;
 
 
 use App\Exceptions\ValueObjectConstraint;
+use App\Interfaces\ToArray;
 
-final class I18nCharFieldsVO extends BaseValueObject implements \JsonSerializable
+final class I18nCharFieldsVO extends BaseValueObject implements \JsonSerializable, ToArray
 {
     /**
      * Название характеристики
@@ -31,9 +32,14 @@ final class I18nCharFieldsVO extends BaseValueObject implements \JsonSerializabl
         $this->short = $this->filterEmptyParam($short, 'Short description');
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return json_encode(['label' => $this->label, 'short' => $this->short], JSON_UNESCAPED_UNICODE);
+        return $this->toArray();
+    }
+
+    public function toArray(): array
+    {
+        return ['label' => $this->label, 'short' => $this->short];
     }
 
     /**

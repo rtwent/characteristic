@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity\OrmTypes;
 
+use App\Collections\RealtyCategoriesCollection;
+use App\Collections\RealtyTypesCollection;
+use App\Entity\ValueObjects\SearchPropertyVO;
 use App\Exceptions\ValueObjectConstraint;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use App\Entity\ValueObjects\I18nCharVO;
@@ -20,6 +23,25 @@ final class CharSearchPropertyDbType extends JsonbToArrayType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return new I18nCharVO(json_decode($value, true));
+        $decoded = json_decode($value, true)['search'] ?? [];
+        $sort = $decoded['sort'] ?? 0;
+        $input = $decoded['input'] ?? null;
+        $isSecret = $decoded['isSecret'] ?? false;
+
+        $realtyTypes = $decoded['types'] ?? [];
+        $realtyTypeCollection = new RealtyTypesCollection();
+        foreach ($realtyTypes as $realtyType) {
+            $realtyTypeCollection->append($realtyType);
+        }
+
+        $categories = $decoded['categories'] ?? [];
+        $categoriesCollection = new RealtyCategoriesCollection();
+        foreach ($categories as $category) {
+            $categoriesCollection->append($category);
+        }
+
+        return new SearchPropertyVO(
+            $sort, $input, $realtyTypeCollection, $categoriesCollection, $isSecret
+        );
     }
 }

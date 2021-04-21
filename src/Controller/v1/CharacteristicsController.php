@@ -50,9 +50,10 @@ class CharacteristicsController implements ValidatableRequest
     public function create(Request $request): Response
     {
         $dto = $this->createDto($request);
-        $this->upsertService->create($dto);
+        $responseDto = $this->upsertService->create($dto);
+
         return new JsonResponse(
-            $this->normalizer->normalize(['hi' => 'Hallo'])
+            $this->normalizer->normalize($responseDto)
         );
     }
 

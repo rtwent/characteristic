@@ -7,8 +7,9 @@ namespace App\Entity\ValueObjects;
 
 use App\Enum\LangsEnum;
 use App\Exceptions\ValueObjectConstraint;
+use App\Interfaces\ToArray;
 
-final class I18nCharVO implements \JsonSerializable
+final class I18nCharVO implements \JsonSerializable, ToArray
 {
     /**
      * @var I18nCharFieldsVO[]
@@ -26,7 +27,25 @@ final class I18nCharVO implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return json_encode($this->i18nFields, \JSON_UNESCAPED_UNICODE, 2);
+        return json_encode($this->i18nFields, \JSON_UNESCAPED_UNICODE);
+    }
+
+    public function toArray(): array
+    {
+        return json_decode($this->jsonSerialize(), true);
+    }
+
+    public function singleLanguage(string $lang): I18nCharFieldsVO
+    {
+        if (!LangsEnum::accepts($lang)) {
+            throw new ValueObjectConstraint(sprintf("Lang %s is not presented in LangEnum", $lang));
+        }
+
+        if (!array_key_exists($lang, $this->toArray())) {
+            return new I18nCharFieldsVO("-", "-");
+        }
+
+        return $this->i18nFields[$lang];
     }
 
     /**

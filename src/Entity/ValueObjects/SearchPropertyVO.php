@@ -9,8 +9,9 @@ use App\Collections\RealtyCategoriesCollection;
 use App\Collections\RealtyTypesCollection;
 use App\Enum\InputTypeEnum;
 use App\Exceptions\ValueObjectConstraint;
+use App\Interfaces\ToArray;
 
-final class SearchPropertyVO extends BaseValueObject
+final class SearchPropertyVO extends BaseValueObject implements ToArray
 {
     private int $sort;
     private string $input;
@@ -28,7 +29,7 @@ final class SearchPropertyVO extends BaseValueObject
      */
     public function __construct(
         int $sort,
-        string $input,
+        ?string $input,
         RealtyTypesCollection $types,
         RealtyCategoriesCollection $categories,
         bool $isSecret
@@ -41,8 +42,34 @@ final class SearchPropertyVO extends BaseValueObject
         $this->isSecret = $isSecret;
     }
 
-    private function setInput(string $value): string
+    public function toArray(): array
     {
+        $returnArray['search'] = [];
+
+        $attributes = ['sort', 'input', 'isSecret'];
+        foreach ($attributes as $attribute) {
+            if (isset($this->$attribute)) {
+                $returnArray['search'][$attribute] = $this->$attribute;
+            }
+        }
+
+        if (isset($this->types)) {
+            $returnArray['search']['types'] = $this->types->getArrayCopy();
+        }
+
+        if (isset($this->categories)) {
+            $returnArray['search']['categories'] = $this->categories->getArrayCopy();
+        }
+
+        return $returnArray;;
+    }
+
+    private function setInput(?string $value): string
+    {
+        if (\is_null($value)) {
+            return $value;
+        }
+
         if (!InputTypeEnum::accepts($value)) {
             throw new ValueObjectConstraint(sprintf("Value %s does not exist in InputTypeEnum", $value));
         }

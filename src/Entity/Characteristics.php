@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\ValueObjects\I18nCharVO;
 use App\Entity\ValueObjects\SearchPropertyVO;
 use App\Enum\CharsTypeEnum;
+use App\Interfaces\Validatable;
 use App\Repository\CharacteristicsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index as INDEX;
@@ -12,6 +13,9 @@ use Doctrine\ORM\Mapping\UniqueConstraint as UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 use DateTimeInterface;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\CharacteristicsRepository::class)
@@ -19,9 +23,10 @@ use DateTimeInterface;
  *     name="characteristics",
  *     uniqueConstraints={@UniqueConstraint(name="char_unique_alias", columns={"alias"})}
  * )
+ * @UniqueEntity("alias")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
-class Characteristics
+class Characteristics implements Validatable
 {
     /**
      * @ORM\Id
@@ -29,10 +34,12 @@ class Characteristics
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
      */
-    private string $id;
+    private Uuid $id;
 
     /**
      * @ORM\Column(type="string", unique=true, length=50, unique=true)
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^[-a-z0-9]+$/")
      */
     private string $alias;
 
@@ -42,24 +49,26 @@ class Characteristics
     private I18nCharVO $i18n;
 
     /**
-     * @ORM\Column(type="CharSearchPropertyType")
+     * @ORM\Column(type="CharSearchPropertyType", options={"jsonb": true, "default" : "{}"})
      */
     private SearchPropertyVO $property;
 
     /**
-     * @ORM\Column(type="CharType")
+     * @ORM\Column(type="CharType", length=25)
+     * @Assert\NotBlank()
      */
     private CharsTypeEnum $type;
 
     /**
      * @ORM\Column(name="old_vector_id", nullable=true)
+     * @Assert\Positive()
      */
     private int $oldVectorId;
 
     /**
-     * @ORM\Column(name="old_form_builder", options={"jsonb": true, "default" : "{}"})
+     * @ORM\Column(name="old_form_builder", type="json", options={"jsonb": true, "default" : "{}"})
      */
-    private $oldFormBuilder;
+    private $oldFormBuilder = [];
 
     /**
      * @ORM\Column(type="datetime", name="created_at")
@@ -110,9 +119,41 @@ class Characteristics
         $this->type = $type;
     }
 
-    public function getId(): string
+    public function getId(): Uuid
     {
         return $this->id;
+    }
+
+    /**
+     * @return I18nCharVO
+     */
+    public function getI18n(): I18nCharVO
+    {
+        return $this->i18n;
+    }
+
+    /**
+     * @return SearchPropertyVO
+     */
+    public function getProperty(): SearchPropertyVO
+    {
+        return $this->property;
+    }
+
+    /**
+     * @return CharsTypeEnum
+     */
+    public function getType(): CharsTypeEnum
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias(): string
+    {
+        return $this->alias;
     }
 
 

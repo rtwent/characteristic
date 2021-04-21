@@ -4,6 +4,7 @@
 namespace App\EventSubscriber;
 
 
+use App\Services\Locale\CurrentLanguage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -31,6 +32,7 @@ class LocaleSetter implements EventSubscriberInterface
         // $request->headers->all()
         // some logic to determine the $locale
         $request->setLocale('ru');
+        CurrentLanguage::getInstance()->setLang('ua');
     }
 
 

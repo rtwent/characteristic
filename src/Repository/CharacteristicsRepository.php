@@ -2,9 +2,12 @@
 
 namespace App\Repository;
 
+use App\dto\CharOutDto;
 use App\dto\UpsertCharacteristic;
 use App\Entity\Characteristics;
 use App\Enum\CharsTypeEnum;
+use App\Services\EntityHelpers\EntityValidator;
+use App\Services\Locale\CurrentLanguage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,14 +25,22 @@ class CharacteristicsRepository extends ServiceEntityRepository
      */
     private EntityManagerInterface $entityManager;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
+    /**
+     * @var EntityValidator
+     */
+    private EntityValidator $validator;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        EntityManagerInterface $entityManager,
+        EntityValidator $validator)
     {
-        //$this->validator = $validator;
+        $this->validator = $validator;
         $this->entityManager = $entityManager;
         parent::__construct($registry, Characteristics::class);
     }
 
-    public function create(UpsertCharacteristic $characteristic)
+    public function create(UpsertCharacteristic $characteristic): CharOutDto
     {
         $entity = new Characteristics();
         $entity->setAlias($characteristic->getAttrName()->getValue());
@@ -37,11 +48,21 @@ class CharacteristicsRepository extends ServiceEntityRepository
         $entity->setProperty($characteristic->getSearchProperties());
         $entity->setType(CharsTypeEnum::get($characteristic->getFieldType()->getEnumValue()));
 
+        $this->validator->validateEntity($entity);
+
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
-        echo '<pre>';
-        var_dump($entity);
-        exit();
+
+        $lang = CurrentLanguage::getInstance()->currentLang();
+
+        return new CharOutDto(
+            $entity->getId(),
+            $entity->getAlias(),
+            $entity->getType()->getValue(),
+            $entity->getI18n()->singleLanguage($lang)->getLabel(),
+            $entity->getI18n()->singleLanguage($lang)->getShort(),
+            $entity->getProperty()->toArray()
+        );
     }
 
     // /**

@@ -51,7 +51,8 @@ class ErrorSubscriber implements EventSubscriberInterface
             'success' => false,
             'error' => $event->getThrowable()->getMessage(),
             'code' => $statusCode,
-            'trace' => explode("\n", $event->getThrowable()->getTraceAsString())
+            //'trace' => explode("\n", $event->getThrowable()->getTraceAsString())
+            'trace' => $event->getThrowable()->getTraceAsString()
         ];
 
         $this->logger->error(\sprintf("%s %s", $event->getThrowable()->getMessage(), $event->getThrowable()->getTraceAsString()));

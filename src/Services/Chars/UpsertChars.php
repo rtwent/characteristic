@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Chars;
 
 
+use App\dto\CharOutDto;
 use App\dto\UpsertCharacteristic;
 use App\Entity\Characteristics;
 use App\Interfaces\Chars\IUpsertService;
@@ -26,10 +27,10 @@ final class UpsertChars implements IUpsertService
         $this->entityManager = $entityManager;
     }
 
-    public function create(UpsertCharacteristic $characteristic)
+    public function create(UpsertCharacteristic $characteristic): CharOutDto
     {
-        $this->entityManager->getRepository(Characteristics::class)
-        ->create($characteristic);
+        return $this->entityManager->getRepository(Characteristics::class)
+            ->create($characteristic);
     }
 
 
