@@ -1,0 +1,32 @@
+### single non existant with all data
+GET {{host}}/characteristic/afdc94c7-5289-4277-990f-c051c8d4be67
+Accept: application/json
+
+### inserting new street
+POST {{host}}/characteristic
+Content-Type: application/json
+
+{
+  "attribute": "newattr",
+  "i18n": {
+    "ru": {
+      "label": "Новый аттр",
+      "short": "Новый"
+    },
+    "ua": {
+      "label": "Новий аттр",
+      "short": "Новмй"
+    }
+  },
+  "type": "fk",
+  "property": {
+    "search": {
+      "sort": 90,
+      "input": "text",
+      "types": ["apartment", "apartment_complex"],
+      "categories": ["secret"],
+      "is_secret": true
+    }
+  }
+}
+

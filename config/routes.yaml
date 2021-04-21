@@ -1,3 +1,20 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+#app_services_step_get:
+#  path: step/get/{serviceId}
+#  methods: GET
+#  controller: App\Controller\v1\StepsController::getSteps
+#  requirements:
+#    serviceId: '\d+'
+#    format: json
+
+controllers:
+  resource: '../src/Controller/v1/'
+  type: annotation
+  prefix: '/v1'
+  name_prefix: 'v1_'
+  trailing_slash_on_root: false
+# exclude: '../../src/Controller/v2'
+

@@ -1,106 +1,17 @@
-FROM php:7.4-fpm-alpine
+FROM php:8.0-fpm
 
-# Configure version constraints
-ENV PHP_ENABLE_XDEBUG=1 \
-    PATH=/app:/app/vendor/bin:/root/.composer/vendor/bin:$PATH \
-    TERM=linux \
-    VERSION_PRESTISSIMO_PLUGIN=^0.3.7 \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    GIT_USER_EMAIL=rtwent@ukr.net \
-    GIT_USER_NAME=R22symfony
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libssl-dev zlib1g-dev curl git unzip libxml2-dev libpq-dev libzip-dev && \
+    pecl install apcu && \
+    docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql && \
+    docker-php-ext-install -j$(nproc) zip opcache intl pdo_pgsql pgsql && \
+    docker-php-ext-enable apcu pdo_pgsql sodium && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN apk --update --virtual build-deps add \
-        autoconf \
-        make \
-        gcc \
-        g++ \
-        libtool \
-        icu-dev \
-        curl-dev \
-        freetype-dev \
-        imagemagick-dev \
-        oniguruma-dev \
-        pcre-dev \
-        postgresql-dev \
-        libjpeg-turbo-dev \
-        libpng-dev \
-        libxml2-dev && \
-    apk add \
-        git \
-        curl \
-        bash \
-        bash-completion \
-        icu \
-        imagemagick \
-        pcre \
-        freetype \
-        libintl \
-        libjpeg-turbo \
-        libpng \
-        libzip-dev \
-        libltdl \
-        libxml2 \
-        mysql-client \
-        postgresql && \
-    docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-configure bcmath && \
-    docker-php-ext-install \
-        soap \
-        calendar \
-        curl \
-        bcmath \
-        exif \
-        gd \
-        iconv \
-        intl \
-        mbstring \
-        opcache \
-        pcntl \
-        pdo_mysql \
-        pdo_pgsql \
-        zip \
-        tokenizer \
-        xml \
-        pgsql && \
-    pecl install \
-        imagick \
-		xdebug \
-        mongodb && \
-    docker-php-ext-enable xdebug && \
-    apk del \
-        build-deps
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN echo "extension=imagick.so" > /usr/local/etc/php/conf.d/pecl-imagick.ini && \
-    echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/pecl-mongodb.ini
+WORKDIR /var/www
 
+CMD composer i -o ; wait-for-it db:5432 -- bin/console doctrine:migrations:migrate ;  php-fpm
 
-# Add configuration files
-COPY image-files/ /
-
-
-# Add GITHUB_API_TOKEN support for composer
-RUN chmod 700 \
-        /usr/local/bin/docker-php-entrypoint \
-        /usr/local/bin/composer
-
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
-        --filename=composer.phar \
-        --install-dir=/usr/local/bin && \
-    composer clear-cache
-
-# Install composer plugins
-#RUN composer global require --optimize-autoloader \
-#        "hirak/prestissimo:${VERSION_PRESTISSIMO_PLUGIN}" && \
-#    composer global dumpautoload --optimize && \
-#    composer clear-cache
-
-# Symfony installer
-RUN wget https://get.symfony.com/cli/installer -O - | bash
-RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
-RUN git config --global user.email "${GIT_USER_EMAIL}"
-RUN git config --global user.name "${GIT_USER_NAME}"
-RUN rm -rf /var/www/html/public
-
-# Не могу понять где устанавливается, но только тне в прописанной директории
-# RUN symfony new --dir /var/www/html
+EXPOSE 9000
