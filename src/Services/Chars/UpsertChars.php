@@ -8,8 +8,8 @@ namespace App\Services\Chars;
 use App\dto\CharOutDto;
 use App\dto\UpsertCharacteristic;
 use App\Entity\Characteristics;
+use App\Entity\ValueObjects\UuidVO;
 use App\Interfaces\Chars\IUpsertService;
-use App\Repository\CharacteristicsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class UpsertChars implements IUpsertService
@@ -31,6 +31,18 @@ final class UpsertChars implements IUpsertService
     {
         return $this->entityManager->getRepository(Characteristics::class)
             ->create($characteristic);
+    }
+
+    public function update(UpsertCharacteristic $characteristic, UuidVO $uuidVo): CharOutDto
+    {
+        return $this->entityManager->getRepository(Characteristics::class)
+            ->update($characteristic, $uuidVo);
+    }
+
+    public function delete(UuidVO $uuidVo): void
+    {
+        $this->entityManager->getRepository(Characteristics::class)
+            ->remove($uuidVo);
     }
 
 

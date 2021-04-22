@@ -2,21 +2,11 @@
 
 namespace App\Controller\v1;
 
-use App\Collections\RealtyCategoriesCollection;
-use App\Collections\RealtyTypesCollection;
-use App\dto\UpsertCharacteristic;
-use App\Entity\ValueObjects\AliasVO;
-use App\Entity\ValueObjects\EnumVO;
-use App\Entity\ValueObjects\I18nCharFieldsVO;
-use App\Entity\ValueObjects\I18nCharVO;
-use App\Entity\ValueObjects\SearchPropertyVO;
-use App\Enum\CharsTypeEnum;
-use App\Enum\InputTypeEnum;
-use App\Enum\LangsEnum;
-use App\Enum\RealtyTypeEnum;
+use App\dto\CharFilter;
+use App\Entity\ValueObjects\UuidVO;
 use App\Exceptions\ValueObjectConstraint;
-use App\Interfaces\Chars\IUpsertService;
-use App\Interfaces\ValidatableRequest;
+use App\Interfaces\ISelectChars;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,75 +14,80 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CharacteristicsController implements ValidatableRequest
+class CharacteristicsController extends AbstractController
 {
+    private ISelectChars $selectService;
     private NormalizerInterface $normalizer;
 
-    private IUpsertService $upsertService;
+    /**
+     * CharacteristicsController constructor.
+     * @param ISelectChars $selectService
+     */
+    public function __construct(ISelectChars $selectService, NormalizerInterface $normalizer)
+    {
+        $this->selectService = $selectService;
+        $this->normalizer = $normalizer;
+    }
+
 
     /**
-     * @param NormalizerInterface $normalizer
-     * @param IUpsertService $upsertService
+     * @Route(
+     *     "/characteristic/{uuid}",
+     *     name="characteristics_single",
+     *     methods={"GET"},
+     *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
+     * )
+     *
+     * @param string $uuid has 404
+     * @return Response
+     * @throws ValueObjectConstraint
+     * @throws ExceptionInterface
      */
-    public function __construct(NormalizerInterface $normalizer, IUpsertService $upsertService)
+    public function singleByUuid(string $uuid): Response
     {
-        $this->normalizer = $normalizer;
-        $this->upsertService = $upsertService;
+        $dto = $this->selectService->singleChar(new UuidVO($uuid));
+
+        return new JsonResponse($this->normalizer->normalize($dto));
     }
 
     /**
-     * @Route("/characteristic", name="characteristics_create", methods={"POST"})
-     * @param Request $request
+     * @Route(
+     *     "/characteristic/raw/{uuid}",
+     *     name="characteristics_raw_single",
+     *     methods={"GET"},
+     *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
+     * )
+     *
+     * @param string $uuid has 404
      * @return Response
      * @throws ExceptionInterface
      * @throws ValueObjectConstraint
      */
-    public function create(Request $request): Response
+    public function singleRaw(string $uuid): Response
     {
-        $dto = $this->createDto($request);
-        $responseDto = $this->upsertService->create($dto);
-
-        return new JsonResponse(
-            $this->normalizer->normalize($responseDto)
-        );
+        $dto = $this->selectService->rawChar(new UuidVO($uuid));
+        return new JsonResponse($this->normalizer->normalize($dto));
     }
 
     /**
+     * @Route(
+     *     "/characteristic/all",
+     *     name="characteristics_raw_single",
+     *     methods={"GET"}
+     * )
      * @param Request $request
-     * @return UpsertCharacteristic
-     * @throws ValueObjectConstraint
+     * @return Response
+     * @throws ExceptionInterface
      */
-    private function createDto(Request $request): UpsertCharacteristic
+    public function collection(Request $request): Response
     {
-        $requestArray = $request->request->all();
-
-        $i18nFields = [];
-        foreach (LangsEnum::values() as $lang) {
-            $i18nFields[$lang] = new I18nCharFieldsVO(
-                $requestArray['i18n'][$lang]['label'],
-                $requestArray['i18n'][$lang]['short']
-            );
-        }
-        $i18n = new I18nCharVO($i18nFields);
-
-        $typeValues = $requestArray['property']['search']['types'] ?? [];
-        $realtyTypes = new RealtyTypesCollection();
-        array_map(fn($type) => $realtyTypes->append($type), $typeValues);
-
-        $categoryValues = $requestArray['property']['search']['categories'] ?? [];
-        $categories = new RealtyCategoriesCollection();
-        array_map(fn($type) => $categories->append($type), $categoryValues);
-
-        $searchPropertyVo = new SearchPropertyVO(
-            $requestArray['property']['search']['sort'] ?? 0,
-            $requestArray['property']['search']['input'] ?? 'text',
-            $realtyTypes,
-            $categories,
-            $requestArray['property']['search']['is_secret'] ?? false,
+        $charFilterDto = new CharFilter(
+            $request->query->get('filter')['aliases'] ?? [],
+            $request->query->get('filter')['labels'] ?? []
         );
 
-        $formType = new EnumVO($requestArray['type'], CharsTypeEnum::class);
+        $dtoCollection = $this->selectService->collection($charFilterDto);
 
-        return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attribute']));
+        return new JsonResponse($this->normalizer->normalize($dtoCollection));
     }
 }

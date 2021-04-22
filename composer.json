@@ -25,10 +25,14 @@
         "symfony/serializer": "5.2.*",
         "symfony/uid": "5.2.*",
         "symfony/validator": "5.2.*",
-        "symfony/yaml": "5.2.*"
+        "symfony/yaml": "5.2.*",
+        "scienta/doctrine-json-functions": "~4.3"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.30"
+        "symfony/maker-bundle": "^1.30",
+        "symfony/stopwatch": "^5.2",
+        "symfony/twig-bundle": "^5.2",
+        "symfony/web-profiler-bundle": "^5.2"
     },
     "config": {
         "optimize-autoloader": true,

@@ -33,3 +33,4 @@ services:
     ############################################ USER DEFINED ############################################
     # Service for processing update and insert of characteristics
     App\Interfaces\Chars\IUpsertService: '@App\Services\Chars\UpsertChars'
+    App\Interfaces\Chars\ISelectChars: '@App\Services\Chars\SelectChars'

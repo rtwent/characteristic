@@ -20,6 +20,11 @@ doctrine:
             softdeleteable:
                 class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                 enabled: true
+        dql:
+            string_functions:
+                JSON_EXTRACT_PATH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonExtractPath
+                JSON_GET_TEXT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGetText
+                JSON_GET: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGet
         mappings:
             App:
                 is_bundle: false

@@ -33,7 +33,7 @@ final class AliasVO extends BaseValueObject
             return $value;
         }
 
-        throw new ValueObjectConstraint(sprintf("Value %s is not valid for Alias"));
+        throw new ValueObjectConstraint(sprintf("Value %s is not valid for Alias", $value));
     }
 
 }

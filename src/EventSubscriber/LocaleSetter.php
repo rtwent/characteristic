@@ -4,8 +4,11 @@
 namespace App\EventSubscriber;
 
 
+use App\Enum\LangsEnum;
 use App\Services\Locale\CurrentLanguage;
+use http\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -29,10 +32,17 @@ class LocaleSetter implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
-        // $request->headers->all()
-        // some logic to determine the $locale
-        $request->setLocale('ru');
-        CurrentLanguage::getInstance()->setLang('ua');
+        $lang = $request->query->get('lang', $_ENV['DEFAULT_LANG'] ?? '');
+        if (empty($lang)) {
+            throw new InvalidArgumentException("Application language can not be empty. Set env file with param DEFAULT_LANG", Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!LangsEnum::accepts($lang)) {
+            throw new InvalidArgumentException(sprintf("Language %s is not supported", $lang));
+        }
+
+        $request->setLocale($lang);
+        CurrentLanguage::getInstance()->setLang($lang);
     }
 
 

@@ -2,15 +2,25 @@
 
 namespace App\Repository;
 
+use App\dto\CharFilter;
 use App\dto\CharOutDto;
 use App\dto\UpsertCharacteristic;
 use App\Entity\Characteristics;
+use App\Entity\ValueObjects\UuidVO;
 use App\Enum\CharsTypeEnum;
+use App\EventSubscriber\LocaleSetter;
+use App\Mappers\CharacteristicEntityMapper;
+use App\Repository\Criterias\CriteriasMerger;
 use App\Services\EntityHelpers\EntityValidator;
 use App\Services\Locale\CurrentLanguage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @method Characteristics|null find($id, $lockMode = null, $lockVersion = null)
@@ -40,9 +50,57 @@ class CharacteristicsRepository extends ServiceEntityRepository
         parent::__construct($registry, Characteristics::class);
     }
 
-    public function create(UpsertCharacteristic $characteristic): CharOutDto
+    /**
+     * Filtering records, based on criterias from service and if...else on json fields
+     * @param CharFilter $dto
+     * @param CriteriasMerger $criterias
+     * @return array
+     * @throws QueryException
+     */
+    public function filter(CharFilter $dto, CriteriasMerger $criterias): array
     {
-        $entity = new Characteristics();
+        $lang = CurrentLanguage::getInstance()->currentLang();
+
+        $qb = $this->createQueryBuilder('c')
+            ->addCriteria($criterias->getCriteria());
+
+        foreach ($dto->getLabels() as $key => $label) {
+            $qb->andWhere("UPPER(JSON_GET_TEXT(JSON_GET(c.i18n, '" . $lang . "'), 'label')) like '%" . mb_strtoupper($label, 'utf-8') . "%'");
+        }
+
+        return $qb->getQuery()->execute();
+    }
+
+    public function findOrFail(string $id, $lockMode = null, $lockVersion = null): Characteristics
+    {
+        $entity = $this->find($id, $lockMode, $lockVersion);
+        if (\is_null($entity)) {
+            throw new HttpException(
+                Response::HTTP_NOT_FOUND,
+                sprintf("Characteristic with id %s was not found", $id)
+            );
+        }
+
+        return $entity;
+    }
+
+    public function update(UpsertCharacteristic $characteristic, UuidVO $uuidVO): CharOutDto
+    {
+        $entity = $this->findOrFail($uuidVO->getValue());
+        $this->mutateEntity($entity, $characteristic);
+
+        return (new CharacteristicEntityMapper($entity))->toDto();
+    }
+
+    public function remove(UuidVO $uuidVO): void
+    {
+        $entity = $this->findOrFail($uuidVO->getValue());
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
+
+    private function mutateEntity(Characteristics $entity, UpsertCharacteristic $characteristic): void
+    {
         $entity->setAlias($characteristic->getAttrName()->getValue());
         $entity->setI18n($characteristic->getI18n());
         $entity->setProperty($characteristic->getSearchProperties());
@@ -52,45 +110,14 @@ class CharacteristicsRepository extends ServiceEntityRepository
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
-
-        $lang = CurrentLanguage::getInstance()->currentLang();
-
-        return new CharOutDto(
-            $entity->getId(),
-            $entity->getAlias(),
-            $entity->getType()->getValue(),
-            $entity->getI18n()->singleLanguage($lang)->getLabel(),
-            $entity->getI18n()->singleLanguage($lang)->getShort(),
-            $entity->getProperty()->toArray()
-        );
     }
 
-    // /**
-    //  * @return Characteristics[] Returns an array of Characteristics objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function create(UpsertCharacteristic $characteristic): CharOutDto
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $entity = new Characteristics();
+        $this->mutateEntity($entity, $characteristic);
 
-    /*
-    public function findOneBySomeField($value): ?Characteristics
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return (new CharacteristicEntityMapper($entity))->toDto();
     }
-    */
+
 }
