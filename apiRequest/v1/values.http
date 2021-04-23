@@ -1,0 +1,22 @@
+### inserting new characteristic
+POST {{host}}/value
+Content-Type: application/json
+
+{
+  "fk_char": "bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca",
+  "i18n": {
+    "ru": {
+      "label": "Новое значение"
+    },
+    "ua": {
+      "label": "Нове значення"
+    }
+  },
+  "key": 1,
+  "default_sort": 1,
+  "only_type": [
+    "apartment",
+    "house"
+  ]
+}
+

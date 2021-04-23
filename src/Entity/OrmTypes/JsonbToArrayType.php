@@ -46,4 +46,9 @@ class JsonbToArrayType extends Type
 
         return $value;
     }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform)
+    {
+        return json_decode($value, true);
+    }
 }

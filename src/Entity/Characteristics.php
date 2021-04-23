@@ -31,6 +31,7 @@ class Characteristics implements Validatable
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
+     * @ORM\OneToMany(targetEntity="App\Entity\Values", mappedBy="fkChar")
      */
     private Uuid $id;
 

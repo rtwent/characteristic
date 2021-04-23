@@ -42,7 +42,7 @@ Content-Type: application/json
   }
 }
 
-### inserting new characteristic
+### update characteristic
 PUT {{host}}/characteristic/bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca
 Content-Type: application/json
 

@@ -34,3 +34,4 @@ services:
     # Service for processing update and insert of characteristics
     App\Interfaces\Chars\IUpsertService: '@App\Services\Chars\UpsertChars'
     App\Interfaces\Chars\ISelectChars: '@App\Services\Chars\SelectChars'
+    App\Interfaces\Values\IUpsertValues: '@App\Services\Values\UpsertValues'

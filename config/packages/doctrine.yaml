@@ -5,8 +5,11 @@ doctrine:
         types:
             uuid: Symfony\Bridge\Doctrine\Types\UuidType
             I18nCharDbType: App\Entity\OrmTypes\I18nCharDbType
+            I18nCharValueDbType: App\Entity\OrmTypes\I18nValueDbType
             CharSearchPropertyType: App\Entity\OrmTypes\CharSearchPropertyDbType
             CharType: App\Entity\OrmTypes\CharTypeDbType
+            RealtyTypesDbType: App\Entity\OrmTypes\RealtyTypes
+            JsonbForTrashDbType: App\Entity\OrmTypes\JsonbToArrayType
 
 
         # IMPORTANT: You MUST configure your server version,

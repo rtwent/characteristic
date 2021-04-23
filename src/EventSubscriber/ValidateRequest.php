@@ -4,14 +4,16 @@
 namespace App\EventSubscriber;
 
 
+use App\Exceptions\InvalidArgument;
 use App\Exceptions\RequestValidation;
 use App\Interfaces\ValidatableRequest;
 use App\Services\ValidationServices\Characteristics\CharacteristicCreate;
-use App\Services\ValidationServices\Steps\StoreStepsValidation;
-use App\Services\ValidationServices\Customers\CustomerCreate;
+use App\Services\ValidationServices\Values\ValuesCreate;
+use ReflectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use \App\Services\ValidationServices\AbstractServiceValidator;
@@ -29,8 +31,22 @@ class ValidateRequest implements EventSubscriberInterface
             'class' => CharacteristicCreate::class,
             'validatorArguments' => [],
         ],
-//        'v1_characteristics_create' => [
-//            'class' => CharacteristicCreate::class,
+        'v1_characteristics_update' => [
+            'class' => CharacteristicCreate::class,
+            'validatorArguments' => []
+        ],
+        'v1_values_create' => [
+            'class' => ValuesCreate::class,
+            'validatorArguments' => []
+        ],
+        'v1_values_update' => [
+            'class' => ValuesCreate::class,
+            'validatorArguments' => []
+        ],
+
+        // injecting entity manager example (beta version made by hand in self::onArgumentsCheck())
+//        'v1_values_update' => [
+//            'class' => ValuesCreate::class,
 //            'validatorArguments' => ['entityManager']
 //        ],
     ];
@@ -51,13 +67,13 @@ class ValidateRequest implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::CONTROLLER_ARGUMENTS => 'onArgumentsCheck',
+            KernelEvents::CONTROLLER_ARGUMENTS => ['onArgumentsCheck', 12],
         ];
     }
 
     /**
      * @param ControllerArgumentsEvent $event
-     * @throws \ReflectionException
+     * @throws ReflectionException|InvalidArgument
      */
     public function onArgumentsCheck(ControllerArgumentsEvent $event): void
     {
@@ -85,7 +101,7 @@ class ValidateRequest implements EventSubscriberInterface
         foreach ($this->validators[$route]['validatorArguments'] as $argument) {
             $validatorArguments[] = $this->initializedArguments[$argument];
         }
-        //$validatorArguments['entityManager'] = $this->initializedArguments['entityManager'];
+        $validatorArguments['entityManager'] = $this->initializedArguments['entityManager'];
         $validator = $r->newInstanceArgs($validatorArguments);
 
         if ($request->isMethod(Request::METHOD_GET)) {
@@ -95,6 +111,7 @@ class ValidateRequest implements EventSubscriberInterface
         }
 
         $errors = $validator->validate($requestData);
+
         if (count($errors) > 0) {
             throw new RequestValidation(implode(", ", $errors), null, [], Response::HTTP_UNPROCESSABLE_ENTITY);
         }

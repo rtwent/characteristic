@@ -5,8 +5,8 @@ namespace App\EventSubscriber;
 
 
 use App\Enum\LangsEnum;
+use App\Exceptions\InvalidArgument;
 use App\Services\Locale\CurrentLanguage;
-use http\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -34,11 +34,11 @@ class LocaleSetter implements EventSubscriberInterface
         $request = $event->getRequest();
         $lang = $request->query->get('lang', $_ENV['DEFAULT_LANG'] ?? '');
         if (empty($lang)) {
-            throw new InvalidArgumentException("Application language can not be empty. Set env file with param DEFAULT_LANG", Response::HTTP_BAD_REQUEST);
+            throw new InvalidArgument("Application language can not be empty. Set env file with param DEFAULT_LANG", Response::HTTP_BAD_REQUEST);
         }
 
         if (!LangsEnum::accepts($lang)) {
-            throw new InvalidArgumentException(sprintf("Language %s is not supported", $lang));
+            throw new InvalidArgument(sprintf("Language %s is not supported", $lang));
         }
 
         $request->setLocale($lang);
