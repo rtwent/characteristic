@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity\OrmTypes;
 
+use App\Entity\ValueObjects\I18nValuesFieldsVO;
+use App\Entity\ValueObjects\I18nValuesVO;
+use App\Entity\ValueObjects\RealtyTypesVO;
+use App\Enum\RealtyTypeEnum;
 use App\Exceptions\ValueObjectConstraint;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -19,14 +23,15 @@ final class RealtyTypes extends JsonbToArrayType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return ['TEST'];
-//        $decoded = json_decode($value, true);
-//        $constructorArg = [];
-//        foreach ($decoded as $lang => $charField) {
-//            $constructorArg[$lang] = new I18nValuesFieldsVO($charField['label'] ?? '-');
-//        }
-//
-//        return new I18nValuesVO($constructorArg);
+        $decoded = parent::convertToPHPValue($value, $platform);
+
+        foreach ($decoded as $realtyType) {
+            if (!RealtyTypeEnum::accepts($realtyType)) {
+                throw new ValueObjectConstraint(sprintf("Property %s not supported by RealtyTypeEnum", $realtyType));
+            }
+        }
+
+        return new RealtyTypesVO($decoded);
     }
 
 }

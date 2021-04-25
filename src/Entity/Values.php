@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\ValueObjects\I18nValuesVO;
 use App\Entity\ValueObjects\RealtyTypesVO;
+use App\Interfaces\Validatable;
 use App\Repository\ValuesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -12,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping\UniqueConstraint as UniqueConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ValuesRepository::class)
@@ -23,9 +25,12 @@ use Doctrine\ORM\Mapping\UniqueConstraint as UniqueConstraint;
  *     }
  * )
  *
+ * @UniqueEntity(fields={"key", "defaultSort"})
+ * @UniqueEntity(fields={"fkChar", "i18n"})
+ *
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
-class Values
+class Values implements Validatable
 {
     /**
      * @ORM\Id
@@ -38,7 +43,6 @@ class Values
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Characteristics", inversedBy="id", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="fk_char", referencedColumnName="id", nullable=false)
-     * @Assert\Uuid()
      * @Assert\NotBlank()
      */
     private Characteristics $fkChar;

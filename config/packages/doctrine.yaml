@@ -9,7 +9,7 @@ doctrine:
             CharSearchPropertyType: App\Entity\OrmTypes\CharSearchPropertyDbType
             CharType: App\Entity\OrmTypes\CharTypeDbType
             RealtyTypesDbType: App\Entity\OrmTypes\RealtyTypes
-            JsonbForTrashDbType: App\Entity\OrmTypes\JsonbToArrayType
+            JsonbForTrashDbType: App\Entity\OrmTypes\JsonbForTrashDbType
 
 
         # IMPORTANT: You MUST configure your server version,

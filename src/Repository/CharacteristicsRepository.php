@@ -77,7 +77,7 @@ class CharacteristicsRepository extends ServiceEntityRepository
         if (\is_null($entity)) {
             throw new HttpException(
                 Response::HTTP_NOT_FOUND,
-                sprintf("Characteristic with id %s was not found", $id)
+                sprintf("Active characteristic with id %s was not found", $id)
             );
         }
 

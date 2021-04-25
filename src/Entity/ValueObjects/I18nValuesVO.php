@@ -35,14 +35,14 @@ final class I18nValuesVO implements \JsonSerializable, ToArray
         return json_decode($this->jsonSerialize(), true);
     }
 
-    public function singleLanguage(string $lang): I18nValuesVO
+    public function singleLanguage(string $lang): I18nValuesFieldsVO
     {
         if (!LangsEnum::accepts($lang)) {
             throw new ValueObjectConstraint(sprintf("Lang %s is not presented in LangEnum", $lang));
         }
 
         if (!array_key_exists($lang, $this->toArray())) {
-            return new I18nValuesVO("-");
+            return new I18nValuesFieldsVO("-");
         }
 
         return $this->i18nFields[$lang];
@@ -56,14 +56,14 @@ final class I18nValuesVO implements \JsonSerializable, ToArray
     private function setI18nFields(array $i18nFields): array
     {
         $langFromParam = array_keys($i18nFields);
-        $langFromEnum = LangsEnum::values();
-        $diff = array_diff($langFromEnum, $langFromParam);
-        if (count($diff) > 0) {
-            throw new ValueObjectConstraint(sprintf("Incorrect keys %s for setting language", implode(', ', $diff)));
+        foreach ($langFromParam as $lang) {
+            if(!LangsEnum::accepts($lang)) {
+                throw new ValueObjectConstraint(sprintf("Incorrect keys %s for setting language", $lang));
+            }
         }
 
         foreach ($i18nFields as $i18nField) {
-            if (!$i18nField instanceof I18nValuesVO) {
+            if (!$i18nField instanceof I18nValuesFieldsVO) {
                 throw new ValueObjectConstraint("Instance of I18nValuesVO expected");
             }
         }

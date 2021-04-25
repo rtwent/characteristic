@@ -35,3 +35,4 @@ services:
     App\Interfaces\Chars\IUpsertService: '@App\Services\Chars\UpsertChars'
     App\Interfaces\Chars\ISelectChars: '@App\Services\Chars\SelectChars'
     App\Interfaces\Values\IUpsertValues: '@App\Services\Values\UpsertValues'
+    App\Interfaces\Values\ISelectValues: '@App\Services\Values\SelectValues'

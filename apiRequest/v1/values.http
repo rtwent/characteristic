@@ -1,4 +1,4 @@
-### inserting new characteristic
+### inserting new value to characteristic
 POST {{host}}/value
 Content-Type: application/json
 
@@ -6,17 +6,47 @@ Content-Type: application/json
   "fk_char": "bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca",
   "i18n": {
     "ru": {
-      "label": "Новое значение"
+      "label": "Новое значение2"
     },
     "ua": {
-      "label": "Нове значення"
+      "label": "Нове значення2"
     }
   },
-  "key": 1,
+  "key": 2,
   "default_sort": 1,
   "only_type": [
     "apartment",
     "house"
   ]
 }
+
+### update value
+PUT {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4
+Content-Type: application/json
+
+{
+  "fk_char": "bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca",
+  "i18n": {
+    "ru": {
+      "label": "Отредактировано"
+    },
+    "ua": {
+      "label": "Відредактовано"
+    }
+  },
+  "key": 12,
+  "default_sort": 1,
+  "only_type": [
+    "apartment",
+    "commercial"
+  ]
+}
+
+### Deleting value of characteristic
+DELETE {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4
+Content-Type: application/json
+
+### single value by uuid with translation
+GET {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4?lang=ua
+Accept: application/json
 

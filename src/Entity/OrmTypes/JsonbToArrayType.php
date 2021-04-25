@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\OrmTypes;
 
+use App\Exceptions\InvalidArgument;
 use App\Exceptions\OrmType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -39,6 +40,9 @@ class JsonbToArrayType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         if (!$value instanceof ToArray) {
+            if (!is_object($value)) {
+                throw new InvalidArgument(sprintf("Object expected but %s provided in property %s", gettype($value), $this->getName()));
+            }
             throw new OrmType(sprintf("Variable of type %s must implement toArray interface.", get_class($value)));
         }
 
@@ -49,6 +53,12 @@ class JsonbToArrayType extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        return json_decode($value, true);
+        try {
+            $decoded = json_decode($value, true);
+        } catch (\Throwable $e) {
+            $decoded = [];
+        }
+
+        return $decoded;
     }
 }

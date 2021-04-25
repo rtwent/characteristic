@@ -6,6 +6,7 @@ use App\Entity\ValueObjects\I18nCharVO;
 use App\Entity\ValueObjects\SearchPropertyVO;
 use App\Enum\CharsTypeEnum;
 use App\Interfaces\Validatable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint as UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -14,6 +15,7 @@ use DateTimeInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=App\Repository\CharacteristicsRepository::class)
@@ -87,6 +89,17 @@ class Characteristics implements Validatable
     private ?DateTimeInterface $deletedAt;
 
     /**
+     * Словарные значения характеристики
+     * @var ArrayCollection|Values[]
+     */
+    private ArrayCollection $values;
+
+    public function __construct()
+    {
+        $this->values = new ArrayCollection();
+    }
+
+    /**
      * @param string $alias
      */
     public function setAlias(string $alias): void
@@ -153,6 +166,14 @@ class Characteristics implements Validatable
     public function getAlias(): string
     {
         return $this->alias;
+    }
+
+    /**
+     * @return Values[]|ArrayCollection
+     */
+    public function getValues(): Collection
+    {
+        return $this->values;
     }
 
 

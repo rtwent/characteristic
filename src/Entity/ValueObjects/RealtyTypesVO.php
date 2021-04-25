@@ -24,7 +24,7 @@ final class RealtyTypesVO implements \JsonSerializable, ToArray
 
     public function jsonSerialize()
     {
-        return json_encode($this->i18nFields, \JSON_UNESCAPED_UNICODE);
+        return json_encode($this->realtyTypes, \JSON_UNESCAPED_UNICODE);
     }
 
     public function toArray(): array
@@ -40,7 +40,7 @@ final class RealtyTypesVO implements \JsonSerializable, ToArray
     private function setRealtyTypes(array $realtyTypes): array
     {
         $realtyTypesFromEnum = RealtyTypeEnum::values();
-        $diff = array_diff($realtyTypesFromEnum, $realtyTypes);
+        $diff = array_diff($realtyTypes, $realtyTypesFromEnum);
         if (count($diff) > 0) {
             throw new ValueObjectConstraint(sprintf("Incorrect keys %s for realty types", implode(', ', $diff)));
         }
