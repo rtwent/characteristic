@@ -9,7 +9,7 @@ use App\Enum\RealtyTypeEnum;
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ToArray;
 
-final class RealtyTypesVO implements \JsonSerializable, ToArray
+class RealtyTypesVO implements \JsonSerializable, ToArray
 {
     private array $realtyTypes;
 
@@ -37,7 +37,7 @@ final class RealtyTypesVO implements \JsonSerializable, ToArray
      * @return array
      * @throws ValueObjectConstraint
      */
-    private function setRealtyTypes(array $realtyTypes): array
+    protected function setRealtyTypes(array $realtyTypes): array
     {
         $realtyTypesFromEnum = RealtyTypeEnum::values();
         $diff = array_diff($realtyTypes, $realtyTypesFromEnum);

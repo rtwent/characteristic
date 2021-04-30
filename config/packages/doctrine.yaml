@@ -10,6 +10,8 @@ doctrine:
             CharType: App\Entity\OrmTypes\CharTypeDbType
             RealtyTypesDbType: App\Entity\OrmTypes\RealtyTypes
             JsonbForTrashDbType: App\Entity\OrmTypes\JsonbForTrashDbType
+            RepCharValuesCollectionDbType: App\Entity\OrmTypes\RepCharValuesCollectionDbType
+            RepCharValuesSettingsDbType: App\Entity\OrmTypes\RepCharValuesSettingsDbType
 
 
         # IMPORTANT: You MUST configure your server version,
@@ -28,6 +30,7 @@ doctrine:
                 JSON_EXTRACT_PATH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonExtractPath
                 JSON_GET_TEXT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGetText
                 JSON_GET: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonGet
+                JSONB_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql\JsonbContains
         mappings:
             App:
                 is_bundle: false

@@ -5,16 +5,32 @@ declare(strict_types=1);
 namespace App\dto;
 
 
-use App\Entity\ValueObjects\RealtyTypesVO;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 final class ValueOutDto
 {
+    /**
+     * @Groups({"repCharValues"})
+     */
     private Uuid $id;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private string $label;
+
+    /**
+     * @deprecated field must be removed
+     * @var int
+     */
     private int $key;
+
     private int  $defaultSort;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private array $onlyType;
+
     private CharOutDto $char;
 
     /**

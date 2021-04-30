@@ -41,7 +41,7 @@ class Values implements Validatable
     private Uuid $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristics", inversedBy="id", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Characteristics", inversedBy="values")
      * @ORM\JoinColumn(name="fk_char", referencedColumnName="id", nullable=false)
      * @Assert\NotBlank()
      */

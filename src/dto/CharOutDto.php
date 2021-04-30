@@ -6,14 +6,31 @@ namespace App\dto;
 
 
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 final class CharOutDto
 {
+    /**
+     * @Groups({"repCharValues"})
+     */
     private Uuid $id;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private string $alias;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private string $type;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private string $label;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private string $short;
+
     private array $searchProps;
 
     /**

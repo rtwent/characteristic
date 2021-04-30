@@ -3,16 +3,16 @@ POST {{host}}/value
 Content-Type: application/json
 
 {
-  "fk_char": "bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca",
+  "fk_char": "dccb5f0c-1aab-4faf-b9f8-79cc35f6d144",
   "i18n": {
     "ru": {
-      "label": "Новое значение2"
+      "label": "Новое значение"
     },
     "ua": {
-      "label": "Нове значення2"
+      "label": "Нове значення"
     }
   },
-  "key": 2,
+  "key": 3,
   "default_sort": 1,
   "only_type": [
     "apartment",

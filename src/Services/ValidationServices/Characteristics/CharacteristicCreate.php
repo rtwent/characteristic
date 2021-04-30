@@ -7,6 +7,7 @@ use App\Enum\CharsTypeEnum;
 use App\Enum\InputTypeEnum;
 use App\Enum\LangsEnum;
 use App\Services\ValidationServices\AbstractServiceValidator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,6 +15,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class CharacteristicCreate extends AbstractServiceValidator
 {
+    /**
+     * Came from \App\EventSubscriber\ValidateRequest::$validators
+     * @var EntityManagerInterface
+     */
+    private EntityManagerInterface $entityManager;
+
+    /**
+     * StoreStepsValidation constructor.
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+        parent::__construct();
+    }
 
     /**
      * @return Assert\Collection

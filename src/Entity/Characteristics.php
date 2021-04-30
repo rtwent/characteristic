@@ -33,7 +33,6 @@ class Characteristics implements Validatable
      * @ORM\Column(type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="CUSTOM")
      * @ORM\CustomIdGenerator(class=UuidV4Generator::class)
-     * @ORM\OneToMany(targetEntity="App\Entity\Values", mappedBy="fkChar")
      */
     private Uuid $id;
 
@@ -89,14 +88,20 @@ class Characteristics implements Validatable
     private ?DateTimeInterface $deletedAt;
 
     /**
-     * Словарные значения характеристики
-     * @var ArrayCollection|Values[]
+     * @ORM\OneToMany(targetEntity="App\Entity\Values", mappedBy="fkChar", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="fkChar")
      */
-    private ArrayCollection $values;
+    private Collection $values;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RepresentationValues", mappedBy="characteristic", cascade={"persist", "remove"})
+     */
+    private Collection $representationChars;
 
     public function __construct()
     {
         $this->values = new ArrayCollection();
+        $this->representationChars = new ArrayCollection();
     }
 
     /**
@@ -169,11 +174,19 @@ class Characteristics implements Validatable
     }
 
     /**
-     * @return Values[]|ArrayCollection
+     * @return Collection
      */
     public function getValues(): Collection
     {
         return $this->values;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getRepresentationChars(): Collection
+    {
+        return $this->representationChars;
     }
 
 
