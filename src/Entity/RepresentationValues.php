@@ -122,5 +122,37 @@ class RepresentationValues
         return $this->settings;
     }
 
+    /**
+     * @param Representation $representation
+     */
+    public function setRepresentation(Representation $representation): void
+    {
+        $this->representation = $representation;
+    }
+
+    /**
+     * @param Characteristics $characteristic
+     */
+    public function setCharacteristic(Characteristics $characteristic): void
+    {
+        $this->characteristic = $characteristic;
+    }
+
+    /**
+     * @param RepCharValuesCollectionVO $repCharValues
+     */
+    public function setRepCharValues(RepCharValuesCollectionVO $repCharValues): void
+    {
+        $this->repCharValues = $repCharValues;
+    }
+
+    /**
+     * @param RepCharValueSettingsVO $settings
+     */
+    public function setSettings(RepCharValueSettingsVO $settings): void
+    {
+        $this->settings = $settings;
+    }
+
 
 }

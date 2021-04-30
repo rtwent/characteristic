@@ -81,7 +81,7 @@ class ValuesRepository extends ServiceEntityRepository
 
     private function mutateEntity(Values $entity, UpsertValue $values): void
     {
-        $characteristicEntity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($values->getFkChar()->getValue());
+        $characteristicEntity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($values->getFkChar());
 
         $entity->setI18n($values->getI18n());
         $entity->setDefaultSort($values->getDefaultSort());

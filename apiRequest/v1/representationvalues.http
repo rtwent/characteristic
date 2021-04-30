@@ -1,0 +1,21 @@
+### all chars with values for representation
+POST {{host}}/repvalues
+Content-Type: application/json
+Accept: application/json
+
+{
+   "rep_uuid": "8d28c5b2-74c7-4a6e-864e-3fd1184411b3",
+   "char_uuid": "dccb5f0c-1aab-4faf-b9f8-79cc35f6d145",
+   "char_values": [
+      {
+         "value_uuid":"d4e6f682-fd23-4f6d-8c41-2054c741f0bf",
+         "sort": 3
+      },
+      {
+         "value_uuid":"886302b3-5415-4fa3-b657-ff3c48c332f1",
+         "sort":4
+      }
+   ]
+}
+
+

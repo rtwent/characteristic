@@ -37,3 +37,4 @@ services:
   App\Interfaces\Values\IUpsertValues: '@App\Services\Values\UpsertValues'
   App\Interfaces\Values\ISelectValues: '@App\Services\Values\SelectValues'
   App\Interfaces\Representations\ISelectRepresentation: '@App\Services\Representations\SelectRepresentation'
+  App\Interfaces\Representations\IRepresentationValues: '@App\Services\RepresentationValues\RepresentationValuesUpsert'

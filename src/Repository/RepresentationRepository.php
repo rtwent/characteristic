@@ -30,7 +30,7 @@ class RepresentationRepository extends ServiceEntityRepository
         $qb = $this->getBaseDQlQuery();
         $qb->where('rep.id = ?1')->setParameter(1, $uuidVO->getValue());
 
-        return $this->findOrFail($qb);
+        return $this->findOrFailByQueryBuilder($qb);
     }
 
     public function repCharValuesByRealtyType(UuidVO $uuidVO, RealtyTypeVO $realtyTypeVO): Representation
@@ -52,7 +52,26 @@ class RepresentationRepository extends ServiceEntityRepository
             ) = true
         ")->setParameter(3, $jsonbRealtyType);
 
-        return $this->findOrFail($qb);
+        return $this->findOrFailByQueryBuilder($qb);
+    }
+
+    /**
+     * @param UuidVO $uuidVO
+     * @param null $lockMode
+     * @param null $lockVersion
+     * @return Representation
+     */
+    public function findOrFail(UuidVO $uuidVO, $lockMode = null, $lockVersion = null): Representation
+    {
+        $entity = $this->find($uuidVO->getValue(), $lockMode, $lockVersion);
+        if (\is_null($entity)) {
+            throw new HttpException(
+                Response::HTTP_NOT_FOUND,
+                sprintf("Active representation with id %s was not found", $uuidVO->getValue())
+            );
+        }
+
+        return $entity;
     }
 
     /**
@@ -60,7 +79,7 @@ class RepresentationRepository extends ServiceEntityRepository
      * @return Representation
      * @throws NonUniqueResultException
      */
-    private function findOrFail(QueryBuilder $qb): Representation
+    private function findOrFailByQueryBuilder(QueryBuilder $qb): Representation
     {
         $representation = $qb->getQuery()->getOneOrNullResult();
         if (\is_null($representation)) {

@@ -2,7 +2,13 @@
 
 namespace App\Repository;
 
+use App\dto\RepCharValuesOutDto;
+use App\dto\UpsertCharValuesDto;
+use App\Entity\Characteristics;
+use App\Entity\Representation;
 use App\Entity\RepresentationValues;
+use App\Entity\ValueObjects\RepCharValuesCollectionVO;
+use App\Mappers\RepCharsEntityMapper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +25,22 @@ class RepresentationValuesRepository extends ServiceEntityRepository
         parent::__construct($registry, RepresentationValues::class);
     }
 
-    // /**
-    //  * @return RepresentationValues[] Returns an array of RepresentationValues objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function create(UpsertCharValuesDto $dto): RepCharValuesOutDto
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $entity = new RepresentationValues();
+        $representation = $this->getEntityManager()->getRepository(Representation::class)
+            ->findOrFail($dto->getRepresentation());
+        $characteristic = $this->getEntityManager()->getRepository(Characteristics::class)
+            ->findOrFail($dto->getCharacteristic());
+        $entity->setRepresentation($representation);
+        $entity->setCharacteristic($characteristic);
+        $entity->setRepCharValues(new RepCharValuesCollectionVO($dto->getRepCharValues()->getArrayCopy()));
 
-    /*
-    public function findOneBySomeField($value): ?RepresentationValues
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
+
+        return (new RepCharsEntityMapper($entity))->toDto();
+
     }
-    */
+
 }

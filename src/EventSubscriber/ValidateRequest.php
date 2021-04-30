@@ -8,12 +8,12 @@ use App\Exceptions\InvalidArgument;
 use App\Exceptions\RequestValidation;
 use App\Interfaces\ValidatableRequest;
 use App\Services\ValidationServices\Characteristics\CharacteristicCreate;
+use App\Services\ValidationServices\RepresentationValues\RepresentationValuesCreate;
 use App\Services\ValidationServices\Values\ValuesCreate;
 use ReflectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use \App\Services\ValidationServices\AbstractServiceValidator;
@@ -39,8 +39,12 @@ class ValidateRequest implements EventSubscriberInterface
             'class' => ValuesCreate::class,
             'validatorArguments' => []
         ],
-        'v1_values_update' => [
-            'class' => ValuesCreate::class,
+        'v1_representation_values_insert' => [
+            'class' => RepresentationValuesCreate::class,
+            'validatorArguments' => []
+        ],
+        'v1_representation_values_update' => [
+            'class' => RepresentationValuesCreate::class,
             'validatorArguments' => []
         ],
 

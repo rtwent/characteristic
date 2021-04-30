@@ -71,13 +71,19 @@ class CharacteristicsRepository extends ServiceEntityRepository
         return $qb->getQuery()->execute();
     }
 
-    public function findOrFail(string $id, $lockMode = null, $lockVersion = null): Characteristics
+    /**
+     * @param UuidVO $uuidVO
+     * @param null $lockMode
+     * @param null $lockVersion
+     * @return Characteristics
+     */
+    public function findOrFail(UuidVO $uuidVO, $lockMode = null, $lockVersion = null): Characteristics
     {
-        $entity = $this->find($id, $lockMode, $lockVersion);
+        $entity = $this->find($uuidVO->getValue(), $lockMode, $lockVersion);
         if (\is_null($entity)) {
             throw new HttpException(
                 Response::HTTP_NOT_FOUND,
-                sprintf("Active characteristic with id %s was not found", $id)
+                sprintf("Active characteristic with id %s was not found", $uuidVO->getValue())
             );
         }
 
@@ -94,7 +100,7 @@ class CharacteristicsRepository extends ServiceEntityRepository
 
     public function remove(UuidVO $uuidVO): void
     {
-        $entity = $this->findOrFail($uuidVO->getValue());
+        $entity = $this->findOrFail($uuidVO);
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
