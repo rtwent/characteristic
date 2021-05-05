@@ -2,8 +2,10 @@
 
 namespace App\Controller\v1;
 
+use App\Collections\RealtyTypesCollection;
 use App\Collections\RepCharValuesCollection;
 use App\dto\UpsertCharValuesDto;
+use App\Entity\ValueObjects\RepCharValueSettingsVO;
 use App\Entity\ValueObjects\RepCharValuesVO;
 use App\Entity\ValueObjects\UuidVO;
 use App\Exceptions\ValueObjectConstraint;
@@ -48,9 +50,30 @@ class RepresentationValuesController implements ValidatableRequest
     public function insert(Request $request): Response
     {
         $dto = $this->createDto($request);
-        $this->upsertService->create($dto);
+        $result = $this->upsertService->create($dto);
 
-        return new JsonResponse($this->normalizer->normalize($dto));
+        return new JsonResponse($this->normalizer->normalize($result, null, ['groups' => 'repCharValues']));
+    }
+
+    /**
+     * @Route(
+     *     "/repvalues/{id}",
+     *     name="representation_values_update",
+     *     methods={"PUT"},
+     *     requirements={"id" : "\d+"}
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     * @throws ExceptionInterface
+     * @throws ValueObjectConstraint
+     */
+    public function update(int $id, Request $request): Response
+    {
+        $dto = $this->createDto($request);
+        $result = $this->upsertService->update($id, $dto);
+
+        return new JsonResponse($this->normalizer->normalize($result, null, ['groups' => 'repCharValues']));
     }
 
     /**
@@ -69,10 +92,25 @@ class RepresentationValuesController implements ValidatableRequest
             $repCharValues->append($vo);
         }
 
+        $settings = $requestArray['settings'] ?? [];
+
+        $realtyTypesCollection = new RealtyTypesCollection();
+        $realtyTypes = $settings['types'] ?? [];
+        foreach ($realtyTypes as $realtyType) {
+            $realtyTypesCollection->append($realtyType);
+        }
+
+        $settingsVo = new RepCharValueSettingsVO(
+            $settings['rowId'] ?? 0,
+            $settings['rowOrder'] ?? 0,
+            $realtyTypesCollection
+        );
+
         return new UpsertCharValuesDto(
             new UuidVO($requestArray['rep_uuid'] ?? ''),
             new UuidVO($requestArray['char_uuid'] ?? ''),
-            $repCharValues
+            $repCharValues,
+            $settingsVo
         );
     }
 }

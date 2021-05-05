@@ -31,4 +31,10 @@ final class RepresentationValuesUpsert implements IRepresentationValues
         return $this->entityManager
             ->getRepository(RepresentationValues::class)->create($dto);
     }
+
+    public function update(int $id, UpsertCharValuesDto $dto): RepCharValuesOutDto
+    {
+        return $this->entityManager
+            ->getRepository(RepresentationValues::class)->update($id, $dto);
+    }
 }

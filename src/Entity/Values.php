@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\ValueObjects\I18nValuesVO;
 use App\Entity\ValueObjects\RealtyTypesVO;
+use App\Entity\ValueObjects\RepCharValuePropertiesVO;
 use App\Interfaces\Validatable;
 use App\Repository\ValuesRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -96,6 +97,11 @@ class Values implements Validatable
     private int $oldVectorId;
 
     /**
+     * @var RepCharValuePropertiesVO
+     */
+    private ?RepCharValuePropertiesVO $representationSpecific = null;
+
+    /**
      * @return Uuid
      */
     public function getId(): Uuid
@@ -152,6 +158,14 @@ class Values implements Validatable
     }
 
     /**
+     * @return RepCharValuePropertiesVO|null
+     */
+    public function getRepresentationSpecific(): ?RepCharValuePropertiesVO
+    {
+        return $this->representationSpecific;
+    }
+
+    /**
      * @param Characteristics $fkChar
      */
     public function setFkChar(Characteristics $fkChar): void
@@ -189,6 +203,14 @@ class Values implements Validatable
     public function setOnlyType(RealtyTypesVO $onlyType): void
     {
         $this->onlyType = $onlyType;
+    }
+
+    /**
+     * @param RepCharValuePropertiesVO|null $representationSpecific
+     */
+    public function setRepresentationSpecific(?RepCharValuePropertiesVO $representationSpecific): void
+    {
+        $this->representationSpecific = $representationSpecific;
     }
 
 

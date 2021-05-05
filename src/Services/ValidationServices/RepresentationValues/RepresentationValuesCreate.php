@@ -55,6 +55,20 @@ class RepresentationValuesCreate extends AbstractServiceValidator
                     new CharacteristicExists(['entityManager' => $this->entityManager]),
                 ])
             ]),
+            'settings' => new Assert\Required([
+                new Assert\Type('array'),
+                new Assert\Collection([
+                    'rowId' => new Assert\Type('integer'),
+                    'rowOrder' => new Assert\Type('integer'),
+                    'types' => [
+                        new Assert\Type('array'),
+                        new Assert\All([
+                            new Assert\Type('string'),
+                            new Assert\Choice(RealtyTypeEnum::values())
+                        ])
+                    ]
+                ])
+            ]),
             'char_values' => new Assert\Required([
                 new Assert\Sequentially([
                     new Assert\Type('array'),

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\dto;
 
 
+use App\Entity\ValueObjects\RepCharValuePropertiesVO;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-final class ValueOutDto
+class ValueOutDto
 {
     /**
      * @Groups({"repCharValues"})
@@ -34,6 +35,11 @@ final class ValueOutDto
     private CharOutDto $char;
 
     /**
+     * @Groups({"repCharValues"})
+     */
+    private ?RepCharValuePropertiesVO $specific = null;
+
+    /**
      * ValueOutDto constructor.
      * @param Uuid $id
      * @param string $label
@@ -41,8 +47,17 @@ final class ValueOutDto
      * @param int $defaultSort
      * @param array $onlyType
      * @param CharOutDto $char
+     * @param RepCharValuePropertiesVO|null $specific
      */
-    public function __construct(Uuid $id, string $label, int $key, int $defaultSort, array $onlyType, CharOutDto $char)
+    public function __construct(
+        Uuid $id,
+        string $label,
+        int $key,
+        int $defaultSort,
+        array $onlyType,
+        CharOutDto $char,
+        ?RepCharValuePropertiesVO $specific
+    )
     {
         $this->id = $id;
         $this->label = $label;
@@ -50,6 +65,7 @@ final class ValueOutDto
         $this->defaultSort = $defaultSort;
         $this->onlyType = $onlyType;
         $this->char = $char;
+        $this->specific = $specific;
     }
 
     /**
@@ -98,6 +114,14 @@ final class ValueOutDto
     public function getChar(): CharOutDto
     {
         return $this->char;
+    }
+
+    /**
+     * @return RepCharValuePropertiesVO|null
+     */
+    public function getSpecific(): ?RepCharValuePropertiesVO
+    {
+        return $this->specific;
     }
 
 

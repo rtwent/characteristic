@@ -7,12 +7,21 @@ namespace App\Entity\ValueObjects;
 
 use App\Collections\RealtyTypesCollection;
 use App\Interfaces\ToArray;
-use JsonSerializable;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-final class RepCharValueSettingsVO implements ToArray, JsonSerializable
+final class RepCharValueSettingsVO implements ToArray
 {
+    /**
+     * @Groups({"repCharValues"})
+     */
     private int $rowId;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private int $rowOrder;
+    /**
+     * @Groups({"repCharValues"})
+     */
     private RealtyTypesCollection $realtyTypes;
 
     /**
@@ -37,10 +46,14 @@ final class RepCharValueSettingsVO implements ToArray, JsonSerializable
         ];
     }
 
-    public function jsonSerialize()
-    {
-        return json_encode($this->toArray(), \JSON_UNESCAPED_UNICODE);
-    }
+    /**
+     * @deprecated affects on object normalization
+     * @return false|string
+     */
+//    public function jsonSerialize()
+//    {
+//        return json_encode($this->toArray(), \JSON_UNESCAPED_UNICODE);
+//    }
 
     /**
      * @return int

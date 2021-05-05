@@ -32,7 +32,8 @@ final class ValuesEntityMapper
             $this->entity->getKey(),
             $this->entity->getDefaultSort(),
             $this->entity->getOnlyType()->toArray(),
-            (new CharacteristicEntityMapper($this->entity->getFkChar()))->toDto()
+            (new CharacteristicEntityMapper($this->entity->getFkChar()))->toDto(),
+            $this->entity->getRepresentationSpecific()
         );
     }
 

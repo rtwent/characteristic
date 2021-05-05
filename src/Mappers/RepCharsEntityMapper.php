@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Mappers;
 
+use App\Collections\ValueOutCollection;
 use App\dto\CharOutDto;
 use App\dto\CharOutRawDto;
+use App\dto\CharWithValuesOutDto;
 use App\dto\RepCharValuesOutDto;
 use App\dto\ValueOutDto;
 use App\Entity\Characteristics;
@@ -26,28 +28,22 @@ final class RepCharsEntityMapper
 
     public function toDto(): RepCharValuesOutDto
     {
-        $lang = CurrentLanguage::getInstance()->currentLang();
+        $valuesCollection = $this->entity->getCharacteristicValues();
+        $valueOutCollection = new ValueOutCollection();
+        foreach ($valuesCollection as $repValue) {
+            /** @var Values $repValue */
+            $valueOutCollection->append((new ValuesEntityMapper($repValue))->toDto());
+        }
 
         return new RepCharValuesOutDto(
             $this->entity->getId(),
-            $this->entity->getI18n()->singleLanguage($lang)->getLabel(),
-            $this->entity->getKey(),
-            $this->entity->getDefaultSort(),
-            $this->entity->getOnlyType()->toArray(),
-            (new CharacteristicEntityMapper($this->entity->getFkChar()))->toDto()
+            $this->entity->getRepresentation()->getId(),
+            new CharWithValuesOutDto(
+                (new CharacteristicEntityMapper($this->entity->getCharacteristic()))->toDto(),
+                $valueOutCollection
+            ),
+            $this->entity->getSettings()
         );
     }
-
-//    public function toRawDto(): CharOutRawDto
-//    {
-//        return new CharOutRawDto(
-//            $this->entity->getId(),
-//            $this->entity->getAlias(),
-//            $this->entity->getType()->getValue(),
-//            $this->entity->getProperty()->toArray(),
-//            $this->entity->getI18n()->toArray()
-//        );
-//    }
-
 
 }

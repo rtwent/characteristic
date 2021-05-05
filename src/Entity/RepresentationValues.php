@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Collections\ValueOutCollection;
+use App\Entity\ValueObjects\RepCharValuePropertiesVO;
 use App\Entity\ValueObjects\RepCharValuesCollectionVO;
 use App\Entity\ValueObjects\RepCharValueSettingsVO;
 use App\Entity\ValueObjects\RepCharValuesVO;
@@ -47,6 +48,8 @@ class RepresentationValues
      */
     private RepCharValueSettingsVO $settings;
 
+    private $representationVocabularyValues;
+
     /**
      * @return int
      */
@@ -80,7 +83,7 @@ class RepresentationValues
     }
 
     /**
-     * Too complicated o(n2) difficult. Use it with DQL
+     * Too complicated o(n2) difficult without using of DQL
      * @return ArrayCollection
      * @throws InvalidDbValue
      */
@@ -94,17 +97,18 @@ class RepresentationValues
         }
 
         $repValuesSorted = $repCharValuesCollection->toArray();
-        uksort($repValuesSorted,
-            // $a is a uuid of characteristic value
-            fn(string $a, string $b) => $repValuesSorted[$a][RepCharValuesCollectionVO::SORT_FIELD] <=> $repValuesSorted[$b][RepCharValuesCollectionVO::SORT_FIELD]
-        );
-        $repValuesUuidsSorted = array_flip(array_keys($repValuesSorted));
+        $repValuesUuidsSorted = [];
+        foreach ($repValuesSorted as $key => $repValues) {
+            $repValuesUuidsSorted[$key] = $repValues[RepCharValuesCollectionVO::SORT_FIELD];
+        }
 
         $repValuesCollection = [];
         $allCharValues = $this->getCharacteristic()->getValues();
         $allCharValues->map(function (Values $allCharValue) use ($repValuesUuidsSorted, &$repValuesCollection) {
             if (isset($repValuesUuidsSorted[strval($allCharValue->getId())])) {
                 $offset = $repValuesUuidsSorted[strval($allCharValue->getId())];
+                $representationSpecific = new RepCharValuePropertiesVO($offset);
+                $allCharValue->setRepresentationSpecific($representationSpecific);
                 $repValuesCollection[$offset] = $allCharValue;
             }
         });
