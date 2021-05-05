@@ -7,6 +7,7 @@ namespace App\Services\Representations;
 use App\Collections\CharWithValuesOutCollection;
 use App\Collections\ValueOutCollection;
 use App\dto\CharWithValuesOutDto;
+use App\dto\ValuesBySearchCategories;
 use App\Entity\Representation;
 use App\Entity\RepresentationValues;
 use App\Entity\ValueObjects\RealtyTypeVO;
@@ -16,6 +17,10 @@ use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\Representations\ISelectRepresentation;
 use App\Mappers\CharacteristicEntityMapper;
 use App\Mappers\ValuesEntityMapper;
+use App\Repository\Criterias\CriteriasMerger;
+use App\Repository\Criterias\Representations\CharCriteria;
+use App\Repository\Criterias\Representations\UuidCriteria;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
 
@@ -61,6 +66,29 @@ final class SelectRepresentation implements ISelectRepresentation
         /** @var Representation $representation */
         $representation = $this->entityManager->getRepository(Representation::class)
             ->repCharValues($uuidVO);
+
+        return $this->getCharWithValuesCollection($representation);
+    }
+
+    public function valuesBySearchCategory(ValuesBySearchCategories $dto): CharWithValuesOutCollection
+    {
+        $criterias = new CriteriasMerger(Criteria::create());
+        $criterias->add(new UuidCriteria($dto->getRepresentationUuid()));
+
+        $representation = $this->entityManager->getRepository(Representation::class)
+            ->valuesBySearchCategory($dto, $criterias);
+
+        return $this->getCharWithValuesCollection($representation);
+    }
+
+    public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): CharWithValuesOutCollection
+    {
+        $criterias = new CriteriasMerger(Criteria::create());
+        $criterias->add(new UuidCriteria($representation));
+        $criterias->add(new CharCriteria($characteristic));
+
+        $representation = $this->entityManager->getRepository(Representation::class)
+            ->valuesByCharacteristic($criterias);
 
         return $this->getCharWithValuesCollection($representation);
     }

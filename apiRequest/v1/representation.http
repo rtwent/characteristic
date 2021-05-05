@@ -6,3 +6,11 @@ Accept: application/json
 GET {{host}}/representation/byrealtytype/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/house/?lang=ua
 Accept: application/json
 
+### all chars with values for represenattion of special search type and realty type
+GET {{host}}/representation/bysearchtype/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/secret/?realtyType=apartment&lang=ua
+Accept: application/json
+
+### all chars with values for represenattionfor special characteristic
+GET {{host}}/representation/bychar/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/949011cd-1b11-4fbf-8b0a-03205a092345
+Accept: application/json
+

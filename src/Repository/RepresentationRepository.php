@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\dto\ValuesBySearchCategories;
 use App\Entity\Representation;
 use App\Entity\ValueObjects\RealtyTypeVO;
 use App\Entity\ValueObjects\UuidVO;
+use App\Repository\Criterias\CriteriasMerger;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -29,6 +31,37 @@ class RepresentationRepository extends ServiceEntityRepository
     {
         $qb = $this->getBaseDQlQuery();
         $qb->where('rep.id = ?1')->setParameter(1, $uuidVO->getValue());
+
+        return $this->findOrFailByQueryBuilder($qb);
+    }
+
+    public function valuesByCharacteristic(CriteriasMerger $criterias)
+    {
+        $qb = $this->getBaseDQlQuery();
+        $qb->addCriteria($criterias->getCriteria());
+
+        return $this->findOrFailByQueryBuilder($qb);
+    }
+
+    public function valuesBySearchCategory(ValuesBySearchCategories $dto, CriteriasMerger $criterias): Representation
+    {
+        $qb = $this->getBaseDQlQuery();
+        $qb->addCriteria($criterias->getCriteria());
+        $qb->andWhere("
+            JSONB_CONTAINS(
+                JSON_GET( JSON_GET(chars.property, 'search'), 'categories' ),
+                ?1
+            ) = true
+        ")->setParameter(1, sprintf('["%s"]', $dto->getSearchCategory()->getValue()));
+
+        if (!is_null($dto->getRealtyType())) {
+            $qb->andWhere("
+                JSONB_CONTAINS(
+                JSON_GET( JSON_GET(chars.property, 'search'), 'types' ),
+                ?2
+            ) = true
+            ")->setParameter(2, sprintf('["%s"]', $dto->getRealtyType()->getValue()));
+        }
 
         return $this->findOrFailByQueryBuilder($qb);
     }
@@ -83,7 +116,7 @@ class RepresentationRepository extends ServiceEntityRepository
     {
         $representation = $qb->getQuery()->getOneOrNullResult();
         if (\is_null($representation)) {
-            throw new HttpException(Response::HTTP_NOT_FOUND, sprintf("Representation with id %s was not found", $uuidVO->getValue()));
+            throw new HttpException(Response::HTTP_NOT_FOUND, "Representation was not found");
         }
 
         return $representation;
