@@ -63,7 +63,7 @@ class Characteristics implements Validatable
     private CharsTypeEnum $type;
 
     /**
-     * @ORM\Column(name="old_vector_id", nullable=true)
+     * @ORM\Column(type="integer", name="old_vector_id", nullable=true)
      * @Assert\Positive()
      */
     private int $oldVectorId;
