@@ -21,8 +21,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(
  *     name="values",
  *     uniqueConstraints={
- *      @UniqueConstraint(name="char_translation", columns={"fk_char", "i18n"}),
- *      @UniqueConstraint(name="key_sort", columns={"key", "default_sort"}),
+ *      @UniqueConstraint(name="char_translation", columns={"fk_char", "i18n"})
  *     }
  * )
  *

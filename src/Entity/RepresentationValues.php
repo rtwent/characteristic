@@ -48,8 +48,6 @@ class RepresentationValues
      */
     private RepCharValueSettingsVO $settings;
 
-    private $representationVocabularyValues;
-
     /**
      * @return int
      */

@@ -21,7 +21,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass=App\Repository\CharacteristicsRepository::class)
  * @ORM\Table(
  *     name="characteristics",
- *     uniqueConstraints={@UniqueConstraint(name="char_unique_alias", columns={"alias"})}
+ *     uniqueConstraints={
+ *      @UniqueConstraint(name="char_unique_alias", columns={"alias"}),
+ *      @UniqueConstraint(name="char_unique_uuid", columns={"id"}),
+ *     }
  * )
  * @UniqueEntity("alias")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt")

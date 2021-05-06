@@ -29,6 +29,7 @@ final class CharCriteria implements AddCriteria
     }
 
     /**
+     * @todo использован псевдоним из dql что может привести к ошибкам
      * @param Criteria $criteria
      * @param ExpressionBuilder $expression
      * @return Criteria
