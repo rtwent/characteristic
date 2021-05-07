@@ -8,12 +8,44 @@ namespace App\dto;
 use App\Collections\RepCharValuesCollection;
 use App\Entity\ValueObjects\RepCharValueSettingsVO;
 use App\Entity\ValueObjects\UuidVO;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 
 final class UpsertCharValuesDto
 {
+    /**
+     * @OA\Property(
+     *      description="Id представительства",
+     *      type="string",
+     *      property="rep_uuid"
+     * )
+     */
     private UuidVO $representation;
+    /**
+     * @OA\Property(
+     *      description="Id характеристики",
+     *      type="string",
+     *      property="char_uuid"
+     * )
+     */
     private UuidVO $characteristic;
+    /**
+     * @OA\Property(
+     *      description="Настройки значений характеристики",
+     *      property="char_values",
+     *      type="array",
+     *      @OA\Items(
+     *          ref=@Model(type=App\Entity\ValueObjects\RepCharValuesVO::class)
+     *      )
+     * )
+     */
     private RepCharValuesCollection $repCharValues;
+    /**
+     * @OA\Property(
+     *      description="Настройки отображения характеристик",
+     *      ref=@Model(type=App\Entity\ValueObjects\RepCharValueSettingsVO::class)
+     * )
+     */
     private RepCharValueSettingsVO $settings;
 
     /**

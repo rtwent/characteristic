@@ -4,6 +4,8 @@ namespace App\Controller\v1;
 
 use App\Collections\RealtyTypesCollection;
 use App\Collections\RepCharValuesCollection;
+use App\dto\RepCharValuesOutDto;
+use App\dto\Response202Dto;
 use App\dto\UpsertCharValuesDto;
 use App\Entity\ValueObjects\RepCharValueSettingsVO;
 use App\Entity\ValueObjects\RepCharValuesVO;
@@ -17,6 +19,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 
 class RepresentationValuesController implements ValidatableRequest
 {
@@ -42,6 +48,41 @@ class RepresentationValuesController implements ValidatableRequest
      *     methods={"POST"},
      * )
      *
+     * @Operation(
+     *     operationId="representation_values_insert",
+     *     summary="Внесение характеристики и значений характеристики для представительства",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика со значениями в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\RepCharValuesOutDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Payload для создания, обновления характеристикис привязкой к представительству",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              ref=@Model(type=App\dto\UpsertCharValuesDto::class)
+     *          )
+     *     )
+     * )
+     *
+     * @OA\Tag(name="Наборы для представительств")
+     *
+     * @Security(name="Bearer")
+     *
      * @param Request $request
      * @return Response
      * @throws ExceptionInterface
@@ -63,6 +104,52 @@ class RepresentationValuesController implements ValidatableRequest
      *     requirements={"id" : "\d+"}
      * )
      *
+     * @Operation(
+     *     operationId="representation_values_update",
+     *     summary="Обновление характеристики и значений характеристики для представительства",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика со значениями в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\RepCharValuesOutDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     description="Id записи",
+     *     required=true,
+     *     @OA\Schema(
+     *          type="integer",
+     *          example=1
+     *     )
+     * )
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Payload для создания, обновления характеристикис привязкой к представительству",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              ref=@Model(type=App\dto\UpsertCharValuesDto::class)
+     *          )
+     *     )
+     * )
+     *
+     * @OA\Tag(name="Наборы для представительств")
+     *
+     * @Security(name="Bearer")
+     *
+     * @param int $id
      * @param Request $request
      * @return Response
      * @throws ExceptionInterface
@@ -74,6 +161,62 @@ class RepresentationValuesController implements ValidatableRequest
         $result = $this->upsertService->update($id, $dto);
 
         return new JsonResponse($this->normalizer->normalize($result, null, ['groups' => 'repCharValues']));
+    }
+
+    /**
+     * @Route(
+     *     "/repvalues/{id}",
+     *     name="representation_values_delete",
+     *     methods={"DELETE"},
+     *     requirements={
+     *          "id": "[0-9]+"
+     *     }
+     * )
+     *
+     * @Operation(
+     *     operationId="representation_values_delete",
+     *     summary="Удаление характеристики и значений характеристики для представительства",
+     *     @OA\Response(
+     *          response="202",
+     *          ref="#/components/responses/Accepted"
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     in="path",
+     *     name="id",
+     *     description="Id записи для удаления",
+     *     required=true,
+     *     @OA\Schema(
+     *          type="integer",
+     *          example=1
+     *     )
+     * )
+     *
+     * @OA\Tag(name="Наборы для представительств")
+     *
+     * @Security(name="Bearer")
+     *
+     * @param int $id
+     * @return Response
+     * @throws ExceptionInterface
+     */
+    public function remove(int $id): Response
+    {
+        $this->upsertService->delete($id);
+
+        return new JsonResponse(
+            $this->normalizer->normalize(new Response202Dto()),
+            Response::HTTP_ACCEPTED
+        );
     }
 
     /**

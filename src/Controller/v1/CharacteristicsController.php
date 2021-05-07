@@ -54,6 +54,10 @@ class CharacteristicsController
      *      @OA\Response(
      *          response="404",
      *          ref="#/components/responses/NotFound"
+     *      ),
+     *     @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
@@ -101,6 +105,10 @@ class CharacteristicsController
      *      @OA\Response(
      *          response="404",
      *          ref="#/components/responses/NotFound"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
@@ -143,6 +151,10 @@ class CharacteristicsController
      *                  ref=@Model(type=App\dto\CharOutDto::class)
      *              )
      *          )
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *

@@ -8,18 +8,34 @@ namespace App\Entity\ValueObjects;
 use App\Collections\RealtyTypesCollection;
 use App\Interfaces\ToArray;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class RepCharValueSettingsVO implements ToArray
 {
     /**
+     * @OA\Property(
+     *      description="Ряд для отображения характеристики",
+     *      type="integer"
+     * )
      * @Groups({"repCharValues"})
      */
     private int $rowId;
     /**
+     * @OA\Property(
+     *      description="Позиция в ряду для отображения характеристики",
+     *      type="integer"
+     * )
      * @Groups({"repCharValues"})
      */
     private int $rowOrder;
     /**
+     * @OA\Property(
+     *      type="array",
+     *      @OA\Items(
+     *          ref="#/components/schemas/RealtyTypeEnum"
+     *      )
+     * )
      * @Groups({"repCharValues"})
      */
     private RealtyTypesCollection $realtyTypes;
@@ -47,8 +63,8 @@ final class RepCharValueSettingsVO implements ToArray
     }
 
     /**
-     * @deprecated affects on object normalization
      * @return false|string
+     * @deprecated affects on object normalization
      */
 //    public function jsonSerialize()
 //    {

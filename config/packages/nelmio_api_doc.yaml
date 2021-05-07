@@ -51,6 +51,12 @@ nelmio_api_doc:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/ErrorDto'
+                ValidationFailed:
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorDto'
                 Accepted:
                     description: Request is accepted
                     content:

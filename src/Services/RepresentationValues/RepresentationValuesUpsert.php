@@ -37,4 +37,10 @@ final class RepresentationValuesUpsert implements IRepresentationValues
         return $this->entityManager
             ->getRepository(RepresentationValues::class)->update($id, $dto);
     }
+
+    public function delete(int $id): void
+    {
+        $this->entityManager
+            ->getRepository(RepresentationValues::class)->delete($id);
+    }
 }

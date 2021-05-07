@@ -48,7 +48,14 @@ class RepresentationValuesRepository extends ServiceEntityRepository
         return (new RepCharsEntityMapper($entity))->toDto();
     }
 
-    private function findOrFail($id, $lockMode = null, $lockVersion = null): RepresentationValues
+    public function delete(int $id): void
+    {
+        $entity = $this->findOrFail($id);
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
+    private function findOrFail(int $id, $lockMode = null, $lockVersion = null): RepresentationValues
     {
         $entity = $this->find($id);
         if (\is_null($entity)) {

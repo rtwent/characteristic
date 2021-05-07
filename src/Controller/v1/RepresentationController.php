@@ -64,6 +64,10 @@ class RepresentationController
      *          response="404",
      *          ref="#/components/responses/NotFound",
      *          description="Throws 'Representation was not found' if representation OR characteristic was not found"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
@@ -124,6 +128,10 @@ class RepresentationController
      *          response="404",
      *          ref="#/components/responses/NotFound",
      *          description="Throws 'Representation was not found' if representation OR characteristic was not found"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
@@ -208,6 +216,10 @@ class RepresentationController
      *          response="404",
      *          ref="#/components/responses/NotFound",
      *          description="Throws 'Representation was not found' if representation OR characteristic was not found"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
@@ -261,6 +273,10 @@ class RepresentationController
      *      @OA\Response(
      *          response="404",
      *          ref="#/components/responses/NotFound"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
      *      )
      * )
      *
