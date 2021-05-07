@@ -6,12 +6,15 @@ namespace App\Entity\ValueObjects;
 
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ToArray;
+use OpenApi\Annotations as OA;
 
 final class I18nValuesFieldsVO extends BaseValueObject implements \JsonSerializable, ToArray
 {
     /**
-     * Название характеристики
-     * @var string
+     * @OA\Property(
+     *      description="Перевод значения характеристики",
+     *      type="string"
+     * )
      */
     private string $label;
 

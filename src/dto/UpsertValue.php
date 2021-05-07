@@ -6,13 +6,61 @@ namespace App\dto;
 use App\Entity\ValueObjects\I18nValuesVO;
 use App\Entity\ValueObjects\RealtyTypesVO;
 use App\Entity\ValueObjects\UuidVO;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class UpsertValue
 {
+    /**
+     * @OA\Property(
+     *      description="Uuid значение характеристики",
+     *      type="string",
+     *      property="fk_char"
+     * )
+     */
     private UuidVO $fkChar;
+    /**
+     * @OA\Property(
+     *     description="Языковые данные характеристики",
+     *     type="object",
+     *     property="i18n",
+     *     @OA\Property(
+     *          property="ru",
+     *          type="string",
+     *          ref=@Model(type=App\Entity\ValueObjects\I18nValuesFieldsVO::class)
+     *      ),
+     *     @OA\Property(
+     *          property="ua",
+     *          type="string",
+     *          ref=@Model(type=App\Entity\ValueObjects\I18nValuesFieldsVO::class)
+     *      )
+     * )
+     */
     private I18nValuesVO $i18n;
+    /**
+     * @OA\Property(
+     *      description="Ключ значения (deprecated)",
+     *      type="integer"
+     * )
+     */
     private int $key;
+    /**
+     * @OA\Property(
+     *      description="Дефолтная сортировка",
+     *      type="integer",
+     *      property="default_sort"
+     * )
+     */
     private int $defaultSort;
+    /**
+     * @OA\Property(
+     *      type="array",
+     *      property="only_type",
+     *      @OA\Items(
+     *          ref="#/components/schemas/RealtyTypeEnum"
+     *      )
+     * )
+     */
     private RealtyTypesVO $onlyType;
 
     /**

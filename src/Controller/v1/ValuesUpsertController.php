@@ -2,33 +2,27 @@
 
 namespace App\Controller\v1;
 
-use App\Collections\RealtyCategoriesCollection;
-use App\Collections\RealtyTypesCollection;
 use App\dto\Response202Dto;
-use App\dto\UpsertCharacteristic;
 use App\dto\UpsertValue;
-use App\Entity\ValueObjects\AliasVO;
-use App\Entity\ValueObjects\EnumVO;
-use App\Entity\ValueObjects\I18nCharFieldsVO;
-use App\Entity\ValueObjects\I18nCharVO;
+use App\dto\ValueOutDto;
 use App\Entity\ValueObjects\I18nValuesFieldsVO;
 use App\Entity\ValueObjects\I18nValuesVO;
 use App\Entity\ValueObjects\RealtyTypesVO;
-use App\Entity\ValueObjects\SearchPropertyVO;
 use App\Entity\ValueObjects\UuidVO;
-use App\Enum\CharsTypeEnum;
 use App\Enum\LangsEnum;
 use App\Exceptions\ValueObjectConstraint;
-use App\Interfaces\Chars\IUpsertService;
 use App\Interfaces\ValidatableRequest;
 use App\Interfaces\Values\IUpsertValues;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Uid\Uuid;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use OpenApi\Annotations as OA;
 
 class ValuesUpsertController implements ValidatableRequest
 {
@@ -48,6 +42,42 @@ class ValuesUpsertController implements ValidatableRequest
 
     /**
      * @Route("/value", name="values_create", methods={"POST"})
+     *
+     * @Operation(
+     *     operationId="values_create",
+     *     summary="Внесение значения характеристики",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика со значениями в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\ValueOutDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Payload для создания, обновления характеристики",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              ref=@Model(type=App\dto\UpsertValue::class)
+     *          )
+     *     )
+     * )
+     *
+     * @OA\Tag(name="Словарные данные")
+     *
+     * @Security(name="Bearer")
+     *
      * @param Request $request
      * @return Response
      * @throws ExceptionInterface
@@ -70,6 +100,49 @@ class ValuesUpsertController implements ValidatableRequest
      *     methods={"PUT"},
      *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
      * )
+     *
+     * @Operation(
+     *     operationId="values_update",
+     *     summary="Обновление значения характеристики",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика со значениями в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\ValueOutDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/PathUuid"
+     * )
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\RequestBody(
+     *     required=true,
+     *     description="Payload для создания, обновления характеристики",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              ref=@Model(type=App\dto\UpsertValue::class)
+     *          )
+     *     )
+     * )
+     *
+     * @OA\Tag(name="Словарные данные")
+     *
+     * @Security(name="Bearer")
+     *
      * @param Request $request
      * @param string $uuid
      * @return Response has 404
@@ -93,6 +166,32 @@ class ValuesUpsertController implements ValidatableRequest
      *     methods={"DELETE"},
      *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
      * )
+     *
+     * @Operation(
+     *     operationId="values_update",
+     *     summary="Обновление значения характеристики",
+     *     @OA\Response(
+     *          response="202",
+     *          ref="#/components/responses/Accepted"
+     *      ),
+     *      @OA\Response(
+     *          response="400",
+     *          ref="#/components/responses/ValidationFailed"
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/PathUuid"
+     * )
+     *
+     * @OA\Tag(name="Словарные данные")
+     *
+     * @Security(name="Bearer")
+     *
      * @param string $uuid
      * @return Response has 404
      * @throws ExceptionInterface

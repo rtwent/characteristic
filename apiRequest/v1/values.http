@@ -3,7 +3,7 @@ POST {{host}}/value
 Content-Type: application/json
 
 {
-  "fk_char": "dccb5f0c-1aab-4faf-b9f8-79cc35f6d144",
+  "fk_char": "1a02151e-fa31-42df-8a55-318c6dd69334",
   "i18n": {
     "ru": {
       "label": "Новое значение"
@@ -12,7 +12,7 @@ Content-Type: application/json
       "label": "Нове значення"
     }
   },
-  "key": 3,
+  "key": 23,
   "default_sort": 1,
   "only_type": [
     "apartment",
@@ -21,11 +21,11 @@ Content-Type: application/json
 }
 
 ### update value
-PUT {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4
+PUT {{host}}/value/eccb4388-10c6-4f12-8d5d-ff73b771adb1
 Content-Type: application/json
 
 {
-  "fk_char": "bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca",
+  "fk_char": "1a02151e-fa31-42df-8a55-318c6dd69334",
   "i18n": {
     "ru": {
       "label": "Отредактировано"
@@ -43,10 +43,10 @@ Content-Type: application/json
 }
 
 ### Deleting value of characteristic
-DELETE {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4
+DELETE {{host}}/value/eccb4388-10c6-4f12-8d5d-ff73b771adb1
 Content-Type: application/json
 
 ### single value by uuid with translation
-GET {{host}}/value/b1042e7e-3315-4f97-a3e4-3c6b5e4854d4?lang=ua
+GET {{host}}/value/eccb4388-10c6-4f12-8d5d-ff73b771adb1?lang=ua
 Accept: application/json
 

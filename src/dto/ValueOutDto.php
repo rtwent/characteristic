@@ -46,7 +46,7 @@ class ValueOutDto
      *      type="integer"
      * )
      */
-    private int  $defaultSort;
+    private int $defaultSort;
     /**
      * @OA\Property(
      *      description="Типы недвижимости для которых актуально значение характеристики",
@@ -67,6 +67,9 @@ class ValueOutDto
     private CharOutDto $char;
 
     /**
+     * @OA\Property(
+     *     ref=@Model(type=App\Entity\ValueObjects\RepCharValuePropertiesVO::class)
+     * )
      * @Groups({"repCharValues"})
      */
     private ?RepCharValuePropertiesVO $specific = null;

@@ -70,7 +70,7 @@ class RepresentationValuesController implements ValidatableRequest
      *
      * @OA\RequestBody(
      *     required=true,
-     *     description="Payload для создания, обновления характеристикис привязкой к представительству",
+     *     description="Payload для создания, обновления характеристики привязкой к представительству",
      *     @OA\MediaType(
      *          mediaType="application/json",
      *          @OA\Schema(
@@ -136,7 +136,7 @@ class RepresentationValuesController implements ValidatableRequest
      *
      * @OA\RequestBody(
      *     required=true,
-     *     description="Payload для создания, обновления характеристикис привязкой к представительству",
+     *     description="Payload для создания, обновления характеристики привязкой к представительству",
      *     @OA\MediaType(
      *          mediaType="application/json",
      *          @OA\Schema(

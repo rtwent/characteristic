@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Entity\ValueObjects;
 
 
-use App\Collections\RealtyTypesCollection;
 use App\Interfaces\ToArray;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
 
 final class RepCharValuePropertiesVO implements ToArray
 {
     /**
+     * @OA\Property(
+     *      description="Сортировка значение характеристики",
+     *      type="integer"
+     * )
      * @Groups({"repCharValues"})
      */
     private int $sort;
