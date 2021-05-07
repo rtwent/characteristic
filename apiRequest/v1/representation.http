@@ -1,16 +1,16 @@
 ### all chars with values for representation
-GET {{host}}/representation/allchars/8d28c5b2-74c7-4a6e-864e-3fd1184411b3?lang=ua
+GET {{host}}/rep/allchars/22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4?lang=ua
 Accept: application/json
 
 ### all chars with values for representation by realty type
-GET {{host}}/representation/byrealtytype/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/house/?lang=ua
+GET {{host}}/rep/byrealtytype/22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4/house/?lang=ua
 Accept: application/json
 
 ### all chars with values for represenattion of special search type and realty type
-GET {{host}}/representation/bysearchtype/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/secret/?realtyType=apartment&lang=ua
+GET {{host}}/rep/bysearchtype/22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4/secret/?realtyType=apartment&lang=ua
 Accept: application/json
 
-### all chars with values for represenattionfor special characteristic
-GET {{host}}/representation/bychar/8d28c5b2-74c7-4a6e-864e-3fd1184411b3/949011cd-1b11-4fbf-8b0a-03205a092345
+### all chars with values for represenattion for special characteristic
+GET {{host}}/rep/bychar/22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4/1a02151e-fa31-42df-8a55-318c6dd69334
 Accept: application/json
 

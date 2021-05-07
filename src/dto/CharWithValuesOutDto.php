@@ -7,14 +7,25 @@ namespace App\dto;
 
 use App\Collections\ValueOutCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class CharWithValuesOutDto
 {
     /**
+     * @OA\Property(
+     *     ref=@Model(type=App\dto\CharOutDto::class)
+     * )
      * @Groups({"repCharValues"})
      */
     private CharOutDto $charOutDto;
     /**
+     * @OA\Property(
+     *     type="array",
+     *     @OA\Items(
+     *          ref=@Model(type=App\dto\ValueOutDto::class)
+     *     )
+     * )
      * @Groups({"repCharValues"})
      */
     private ValueOutCollection $values;

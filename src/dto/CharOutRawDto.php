@@ -28,8 +28,7 @@ final class CharOutRawDto
     /**
      * @OA\Property(
      *      description="Тип характеристики. Используется для вычисления типа переменной, в которой себе хранит характеристика",
-     *      type="string",
-     *      enum={"string", "fk", "int", "float", "boolean", "array"}
+     *      ref="#/components/schemas/DataTypeEnum"
      * )
      */
     private string $type;

@@ -9,6 +9,7 @@ nelmio_api_doc:
             version: 0.0.1-alpha
         tags:
             - { name: Характеристики, description: Функционал по управлению характеристиками }
+            - { name: Наборы для представительств, description: Функционал для выбора характеристик и их значений на основе представительства }
         components:
             parameters:
                 Language:
@@ -23,6 +24,22 @@ nelmio_api_doc:
                     in: path
                     name: uuid
                     description: Uuid объекта
+                    required: true
+                    schema:
+                        type: string
+                        example: 1a02151e-fa31-42df-8a55-318c6dd69334
+                PathUuidRepresentation:
+                    in: path
+                    name: repUuid
+                    description: Uuid представительства
+                    required: true
+                    schema:
+                        type: string
+                        example: 22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4
+                PathUuidChar:
+                    in: path
+                    name: charUuid
+                    description: Uuid характеристики
                     required: true
                     schema:
                         type: string
@@ -53,6 +70,39 @@ nelmio_api_doc:
                     type: http
                     scheme: bearer
                     bearerFormat: JWT
+            schemas:
+                RealtyTypeEnum:
+                    type: string
+                    example: apartment
+                    description: Тип недвижимости
+                    enum:
+                        - apartment
+                        - house
+                        - commercial
+                        - apartment_complex
+                DataTypeEnum:
+                    type: string
+                    example: string
+                    description: Тип данных для хранения в БД
+                    enum:
+                        - string
+                        - fk
+                        - int
+                        - float
+                        - boolean
+                        - array
+                        - json
+                SearchCategoryEnum:
+                    type: string
+                    example: secret
+                    description: Категории поиска
+                    enum:
+                        - secret
+                        - main
+                        - service
+                        - additional
+                        - rent
+                        - servicebuyer
         security:
             - Bearer: []
     areas: # to filter documented areas
@@ -60,7 +110,7 @@ nelmio_api_doc:
 #            - ^/api/v1/(?!/doc.json$) # Accepts routes under /api except /api/doc
 #            - ^/characteristic/{uuid}
              - ^/characteristic/*
-#            - ^/representation*
+             - ^/rep*
 #            - ^/repvalues*
 #            - ^/value*
     models:

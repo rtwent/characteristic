@@ -8,30 +8,62 @@ namespace App\dto;
 use App\Entity\ValueObjects\RepCharValuePropertiesVO;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 class ValueOutDto
 {
     /**
+     * @OA\Property(
+     *      description="Uuid значение характеристики",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private Uuid $id;
     /**
+     * @OA\Property(
+     *      description="Полное название значения характеристики на текущей локали",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private string $label;
 
     /**
+     * @OA\Property(
+     *      description="Ключ значения характеристики (deprecated)",
+     *      type="integer"
+     * )
      * @deprecated field must be removed
      * @var int
      */
     private int $key;
 
+    /**
+     * @OA\Property(
+     *      description="Дефолтная сортировка значение характеристики",
+     *      type="integer"
+     * )
+     */
     private int  $defaultSort;
     /**
+     * @OA\Property(
+     *      description="Типы недвижимости для которых актуально значение характеристики",
+     *      type="array",
+     *      @OA\Items(
+     *          ref="#/components/schemas/RealtyTypeEnum"
+     *      )
+     * )
      * @Groups({"repCharValues"})
      */
     private array $onlyType;
 
+    /**
+     * @OA\Property(
+     *     ref=@Model(type=App\dto\CharOutDto::class)
+     * )
+     */
     private CharOutDto $char;
 
     /**

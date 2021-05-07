@@ -43,10 +43,8 @@ final class UpsertCharacteristic
     private SearchPropertyVO $searchProperties;
     /**
      * @OA\Property(
-     *      type="string",
      *      description="Тип данных в которых будет храниться характеристика",
-     *      enum={"string", "fk", "int", "float", "boolean", "array"},
-     *      example="string"
+     *      ref="#/components/schemas/DataTypeEnum"
      * )
      */
     private EnumVO $fieldType;
