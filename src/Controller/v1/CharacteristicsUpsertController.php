@@ -23,7 +23,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Uid\Uuid;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 class CharacteristicsUpsertController implements ValidatableRequest
 {
@@ -43,6 +46,31 @@ class CharacteristicsUpsertController implements ValidatableRequest
 
     /**
      * @Route("/characteristic", name="characteristics_create", methods={"POST"})
+     *
+     * @Operation(
+     *     operationId="characteristics_create",
+     *     summary="Создание характеристики",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\CharOutDto::class)
+     *          )
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\RequestBody(
+     *     ref="#/components/requestBodies/CharsUpsert"
+     * )
+     *
+     * @OA\Tag(name="Характеристики")
+     *
+     * @Security(name="Bearer")
+     *
      * @param Request $request
      * @return Response
      * @throws ExceptionInterface
@@ -65,6 +93,39 @@ class CharacteristicsUpsertController implements ValidatableRequest
      *     methods={"PUT"},
      *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
      * )
+     *
+     * @Operation(
+     *     operationId="characteristics_update",
+     *     summary="Редактирование характеристики",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичная характеристика в зависимости от локали",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\CharOutDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/Language"
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/PathUuid"
+     * )
+     *
+     * @OA\RequestBody(
+     *     ref="#/components/requestBodies/CharsUpsert"
+     * )
+     *
+     * @OA\Tag(name="Характеристики")
+     *
+     * @Security(name="Bearer")
+     *
      * @param Request $request
      * @param string $uuid
      * @return Response has 404
@@ -88,6 +149,27 @@ class CharacteristicsUpsertController implements ValidatableRequest
      *     methods={"DELETE"},
      *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
      * )
+     *
+     * @Operation(
+     *     operationId="characteristics_remove",
+     *     summary="Удаление характеристики",
+     *     @OA\Response(
+     *          response="202",
+     *          ref="#/components/responses/Accepted"
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      )
+     * )
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/PathUuid"
+     * )
+     *
+     *
+     * @OA\Tag(name="Характеристики")
+     *
      * @param string $uuid
      * @return Response
      * @throws ExceptionInterface
@@ -135,11 +217,11 @@ class CharacteristicsUpsertController implements ValidatableRequest
             $requestArray['property']['search']['input'] ?? 'text',
             $realtyTypes,
             $categories,
-            $requestArray['property']['search']['is_secret'] ?? false,
+            $requestArray['property']['search']['secret'] ?? false,
         );
 
-        $formType = new EnumVO($requestArray['type'], CharsTypeEnum::class);
+        $formType = new EnumVO($requestArray['fieldType'], CharsTypeEnum::class);
 
-        return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attribute']));
+        return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attrName']));
     }
 }

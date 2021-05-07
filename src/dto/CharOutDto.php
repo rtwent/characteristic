@@ -7,30 +7,58 @@ namespace App\dto;
 
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class CharOutDto
 {
     /**
+     * @OA\Property(
+     *      description="Uuid характеристики",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private Uuid $id;
     /**
+     * @OA\Property(
+     *      description="Уникальный псевдоним характеристики",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private string $alias;
     /**
+     * @OA\Property(
+     *      description="Тип характеристики. Используется для вычисления типа переменной, в которой себе хранит характеристика",
+     *      type="string",
+     *      enum={"string", "fk", "int", "float", "boolean", "array"}
+     * )
      * @Groups({"repCharValues"})
      */
     private string $type;
     /**
+     * @OA\Property(
+     *      description="Полное название характеристики на текущей локали",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private string $label;
     /**
+     * @OA\Property(
+     *      description="Короткое название характеристики на текущей локали",
+     *      type="string"
+     * )
      * @Groups({"repCharValues"})
      */
     private string $short;
 
+    /**
+     * @OA\Property(
+     *     ref=@Model(type=App\Entity\ValueObjects\SearchPropertyVO::class)
+     * )
+     */
     private array $searchProps;
 
     /**

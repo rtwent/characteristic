@@ -1,9 +1,9 @@
 ### single with translation
-GET {{host}}/characteristic/bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca?lang=ua
+GET {{host}}/characteristic/1a02151e-fa31-42df-8a55-318c6dd69334?lang=ua
 Accept: application/json
 
 ### single with all translations
-GET {{host}}/characteristic/raw/bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca?lang=ua
+GET {{host}}/characteristic/raw/1a02151e-fa31-42df-8a55-318c6dd69334?lang=ua
 Accept: application/json
 
 ### collection without search
@@ -11,7 +11,7 @@ GET {{host}}/characteristic/all/
 Accept: application/json
 
 ### collection with search
-GET {{host}}/characteristic/all/?filter[aliases][]=newattr&filter[aliases][]=newattr1&filter[labels][]=нов
+GET {{host}}/characteristic/all/?filter[aliases][]=apartment_type&filter[aliases][]=localcode&filter[labels][]=Квартира
 Accept: application/json
 
 ### inserting new characteristic
@@ -19,7 +19,7 @@ POST {{host}}/characteristic
 Content-Type: application/json
 
 {
-  "attribute": "newattr",
+  "attrName": "newattr",
   "i18n": {
     "ru": {
       "label": "Новый аттрибут",
@@ -30,24 +30,24 @@ Content-Type: application/json
       "short": "Новмй"
     }
   },
-  "type": "fk",
+  "fieldType": "fk",
   "property": {
     "search": {
       "sort": 90,
       "input": "text",
       "types": ["apartment", "apartment_complex"],
       "categories": ["secret"],
-      "is_secret": true
+      "secret": true
     }
   }
 }
 
 ### update characteristic
-PUT {{host}}/characteristic/bbd613ad-3c66-4f3e-bff6-f1ec79ef0dca
+PUT {{host}}/characteristic/6ec30628-6e74-4f29-b401-95d2a2f9978f
 Content-Type: application/json
 
 {
-  "attribute": "newattr",
+  "attrName": "newattr",
   "i18n": {
     "ru": {
       "label": "Новый аттр44",
@@ -58,14 +58,14 @@ Content-Type: application/json
       "short": "Новмй44"
     }
   },
-  "type": "string",
+  "fieldType": "string",
   "property": {
     "search": {
       "sort": 12,
       "input": "text",
       "types": ["apartment"],
       "categories": ["service"],
-      "is_secret": true
+      "secret": true
     }
   }
 }

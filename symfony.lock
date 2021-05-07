@@ -109,6 +109,19 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "nelmio/api-doc-bundle": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
+        },
+        "files": [
+            "config/packages/nelmio_api_doc.yaml",
+            "config/routes/nelmio_api_doc.yaml"
+        ]
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
@@ -258,6 +271,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/options-resolver": {
+        "version": "v5.2.4"
+    },
     "symfony/orm-pack": {
         "version": "v2.1.0"
     },
@@ -384,5 +400,8 @@
     },
     "webmozart/assert": {
         "version": "1.10.0"
+    },
+    "zircote/swagger-php": {
+        "version": "3.1.0"
     }
 }

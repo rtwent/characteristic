@@ -53,7 +53,7 @@ class ValuesRepository extends ServiceEntityRepository
 
     public function update(UpsertValue $value, UuidVO $uuid): ValueOutDto
     {
-        $entity = $this->findOrFail($uuid->getValue());
+        $entity = $this->findOrFail($uuid);
         $this->mutateEntity($entity, $value);
 
         return (new ValuesEntityMapper($entity))->toDto();
@@ -61,18 +61,18 @@ class ValuesRepository extends ServiceEntityRepository
 
     public function remove(UuidVO $uuidVO): void
     {
-        $entity = $this->findOrFail($uuidVO->getValue());
+        $entity = $this->findOrFail($uuidVO);
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
 
-    public function findOrFail(string $id, $lockMode = null, $lockVersion = null): Values
+    public function findOrFail(UuidVO $uuidVO, $lockMode = null, $lockVersion = null): Values
     {
-        $entity = $this->find($id, $lockMode, $lockVersion);
+        $entity = $this->find($uuidVO->getValue(), $lockMode, $lockVersion);
         if (\is_null($entity)) {
             throw new HttpException(
                 Response::HTTP_NOT_FOUND,
-                sprintf("Active characteristic value with id %s was not found", $id)
+                sprintf("Active characteristic value with id %s was not found", $uuidVO->getValue())
             );
         }
 

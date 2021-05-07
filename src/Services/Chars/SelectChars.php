@@ -66,7 +66,7 @@ final class SelectChars implements ISelectChars
     public function singleChar(UuidVO $uuidVO): CharOutDto
     {
         /** @var Characteristics $entity */
-        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO->getValue());
+        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO);
 
         return (new CharacteristicEntityMapper($entity))->toDto();
     }
@@ -74,7 +74,7 @@ final class SelectChars implements ISelectChars
     public function rawChar(UuidVO $uuidVO): CharOutRawDto
     {
         /** @var Characteristics $entity */
-        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO->getValue());
+        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO);
 
         return (new CharacteristicEntityMapper($entity))->toRawDto();
     }

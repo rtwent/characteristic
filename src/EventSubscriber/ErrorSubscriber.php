@@ -4,12 +4,18 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 
+use App\dto\ErrorDto;
+use App\Exceptions\RequestValidation;
+use App\Exceptions\ValidationFail;
+use App\Exceptions\ValueObjectConstraint;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ErrorSubscriber implements EventSubscriberInterface
 {
@@ -18,10 +24,12 @@ class ErrorSubscriber implements EventSubscriberInterface
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
+    private NormalizerInterface $normalizer;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, NormalizerInterface $normalizer)
     {
         $this->logger = $logger;
+        $this->normalizer = $normalizer;
     }
 
     /**
@@ -42,22 +50,29 @@ class ErrorSubscriber implements EventSubscriberInterface
      */
     public function onException(ExceptionEvent $event)
     {
-        $statusCode = ($event->getThrowable()->getCode() === 0) ? Response::HTTP_BAD_GATEWAY : $event->getThrowable()->getCode();
+        $throwable = $event->getThrowable();
+        $statusCode = ($throwable->getCode() === 0) ? Response::HTTP_BAD_GATEWAY : $throwable->getCode();
         if ($statusCode > Response::HTTP_NOT_EXTENDED) {
             $statusCode = Response::HTTP_BAD_GATEWAY;
         }
 
-        $error = [
-            'success' => false,
-            'error' => $event->getThrowable()->getMessage(),
-            'code' => $statusCode,
-            //'trace' => explode("\n", $event->getThrowable()->getTraceAsString())
-            'trace' => $event->getThrowable()->getTraceAsString()
-        ];
+        if ($throwable instanceof HttpException) {
+            /** @var  HttpException $throwable */
+            $statusCode = $throwable->getStatusCode();
+        }
+        if ($throwable instanceof ValueObjectConstraint || $throwable instanceof RequestValidation || $throwable instanceof ValidationFail) {
+            $statusCode = Response::HTTP_BAD_REQUEST;
+        }
 
-        $this->logger->error(\sprintf("%s %s", $event->getThrowable()->getMessage(), $event->getThrowable()->getTraceAsString()));
+        $errorDto = new ErrorDto(
+            $throwable->getMessage(),
+            $statusCode,
+            $throwable->getTraceAsString()
+        );
 
-        $response = new JsonResponse($error);
+        $this->logger->error(\sprintf("%s %s", $throwable->getMessage(), $throwable->getTraceAsString()));
+
+        $response = new JsonResponse($this->normalizer->normalize($errorDto));
         $response->setStatusCode($statusCode);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Access-Control-Allow-Origin', '*');

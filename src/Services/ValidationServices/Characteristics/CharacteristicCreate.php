@@ -42,7 +42,7 @@ class CharacteristicCreate extends AbstractServiceValidator
         }
 
         return new Assert\Collection([
-            'attribute' => new Assert\Required([
+            'attrName' => new Assert\Required([
                 new Assert\Type('string'),
                 new Assert\Regex('/^[-a-z0-9]+$/')
             ]),
@@ -50,7 +50,7 @@ class CharacteristicCreate extends AbstractServiceValidator
                 new Assert\Type('array'),
                 new Assert\Collection($langCollection)
             ]),
-            'type' => new Assert\Required([
+            'fieldType' => new Assert\Required([
                 new Assert\Type('string'),
                 new Assert\Choice(CharsTypeEnum::values())
             ]),

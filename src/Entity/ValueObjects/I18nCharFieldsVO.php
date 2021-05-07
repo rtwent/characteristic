@@ -6,17 +6,23 @@ namespace App\Entity\ValueObjects;
 
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ToArray;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class I18nCharFieldsVO extends BaseValueObject implements \JsonSerializable, ToArray
 {
     /**
-     * Название характеристики
-     * @var string
+     * @OA\Property(
+     *      description="Полное название характеристики",
+     *      type="string"
+     * )
      */
     private string $label;
     /**
-     * Короткое название характеристики
-     * @var string
+     * @OA\Property(
+     *      description="Короткое название характеристики",
+     *      type="string"
+     * )
      */
     private string $short;
 

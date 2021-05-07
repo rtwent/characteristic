@@ -92,7 +92,7 @@ class CharacteristicsRepository extends ServiceEntityRepository
 
     public function update(UpsertCharacteristic $characteristic, UuidVO $uuidVO): CharOutDto
     {
-        $entity = $this->findOrFail($uuidVO->getValue());
+        $entity = $this->findOrFail($uuidVO);
         $this->mutateEntity($entity, $characteristic);
 
         return (new CharacteristicEntityMapper($entity))->toDto();

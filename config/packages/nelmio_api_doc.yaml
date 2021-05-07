@@ -1,0 +1,70 @@
+nelmio_api_doc:
+    documentation:
+        servers:
+            - url: https://vec.chars
+              description: API over HTTPS
+        info:
+            title: Сервис характеристик
+            description: Централизованное хранилище характеристик объекта недвижимости
+            version: 0.0.1-alpha
+        tags:
+            - { name: Характеристики, description: Функционал по управлению характеристиками }
+        components:
+            parameters:
+                Language:
+                    in: query
+                    name: lang
+                    description: Язык приложения
+                    schema:
+                        type: string
+                        enum: ["ua", "ru"]
+                        example: ua
+                PathUuid:
+                    in: path
+                    name: uuid
+                    description: Uuid объекта
+                    required: true
+                    schema:
+                        type: string
+                        example: 1a02151e-fa31-42df-8a55-318c6dd69334
+            responses:
+                NotFound:
+                    description: Document not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ErrorDto'
+                Accepted:
+                    description: Request is accepted
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Response202Dto'
+            requestBodies:
+                CharsUpsert:
+                    description: Payload для создания, обновления характеристики
+                    required: true
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpsertCharacteristic'
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+    areas: # to filter documented areas
+        path_patterns:
+#            - ^/api/v1/(?!/doc.json$) # Accepts routes under /api except /api/doc
+#            - ^/characteristic/{uuid}
+             - ^/characteristic/*
+#            - ^/representation*
+#            - ^/repvalues*
+#            - ^/value*
+    models:
+        names:
+            - { alias: ErrorDto, type: App\dto\ErrorDto }
+            - { alias: UpsertCharacteristic, type: App\dto\UpsertCharacteristic }
+            - { alias: Response202Dto, type: App\dto\Response202Dto }

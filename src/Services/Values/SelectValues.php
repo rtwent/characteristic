@@ -28,7 +28,7 @@ final class SelectValues implements ISelectValues
 
     public function singleChar(UuidVO $uuidVO): ValueOutDto
     {
-        $entity = $this->entityManager->getRepository(Values::class)->findOrFail($uuidVO->getValue());
+        $entity = $this->entityManager->getRepository(Values::class)->findOrFail($uuidVO);
         return (new ValuesEntityMapper($entity))->toDto();
     }
 }

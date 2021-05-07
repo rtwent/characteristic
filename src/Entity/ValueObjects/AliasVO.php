@@ -29,7 +29,7 @@ final class AliasVO extends BaseValueObject
     private function setAlias(string $alias): string
     {
         $value = $this->filterEmptyParam($alias);
-        if (preg_match('/^[-a-z0-9]+$/', $value)) {
+        if (preg_match('/^[-a-z0-9_]+$/', $value)) {
             return $value;
         }
 

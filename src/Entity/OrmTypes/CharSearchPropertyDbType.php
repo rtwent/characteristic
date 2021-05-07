@@ -26,7 +26,7 @@ final class CharSearchPropertyDbType extends JsonbToArrayType
         $decoded = json_decode($value, true)['search'] ?? [];
         $sort = $decoded['sort'] ?? 0;
         $input = $decoded['input'] ?? null;
-        $isSecret = $decoded['isSecret'] ?? false;
+        $isSecret = $decoded['is_secret'] ?? false;
 
         $realtyTypes = $decoded['types'] ?? [];
         $realtyTypeCollection = new RealtyTypesCollection();
