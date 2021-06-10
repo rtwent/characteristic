@@ -12,6 +12,7 @@ doctrine:
             JsonbForTrashDbType: App\Entity\OrmTypes\JsonbForTrashDbType
             RepCharValuesCollectionDbType: App\Entity\OrmTypes\RepCharValuesCollectionDbType
             RepCharValuesSettingsDbType: App\Entity\OrmTypes\RepCharValuesSettingsDbType
+            I18nMeasureUnitsDbType: App\Entity\OrmTypes\I18nMeasureUnitsDbType
 
 
         # IMPORTANT: You MUST configure your server version,

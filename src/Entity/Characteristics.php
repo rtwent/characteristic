@@ -47,6 +47,11 @@ class Characteristics implements Validatable
     private string $alias;
 
     /**
+     * @ORM\OneToOne(targetEntity="App\Entity\MeasureUnits")
+     */
+    private MeasureUnits $measureUnit;
+
+    /**
      * @ORM\Column(type="I18nCharDbType", options={"jsonb":true, "default":"{}"})
      */
     private I18nCharVO $i18n;
@@ -190,6 +195,22 @@ class Characteristics implements Validatable
     public function getRepresentationChars(): Collection
     {
         return $this->representationChars;
+    }
+
+    /**
+     * @return MeasureUnits
+     */
+    public function getMeasureUnit(): MeasureUnits
+    {
+        return $this->measureUnit;
+    }
+
+    /**
+     * @param MeasureUnits $measureUnit
+     */
+    public function setMeasureUnit(MeasureUnits $measureUnit): void
+    {
+        $this->measureUnit = $measureUnit;
     }
 
 
