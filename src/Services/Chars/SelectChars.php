@@ -14,6 +14,7 @@ use App\Entity\ValueObjects\UuidVO;
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ISelectChars;
 use App\Mappers\CharacteristicEntityMapper;
+use App\Repository\CharacteristicsRepository;
 use App\Repository\Criterias\Chars\AliasCriteria;
 use App\Repository\Criterias\CriteriasMerger;
 use Doctrine\Common\Collections\Criteria;
@@ -27,12 +28,15 @@ final class SelectChars implements ISelectChars
      */
     private EntityManagerInterface $entityManager;
 
+    private CharacteristicsRepository $characteristicRepo;
+
     /**
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->characteristicRepo = $this->entityManager->getRepository(Characteristics::class);
     }
 
     /**
@@ -47,8 +51,7 @@ final class SelectChars implements ISelectChars
             $criterias->add(new AliasCriteria($dto->getAliases()));
         }
 
-        $repo = $this->entityManager->getRepository(Characteristics::class);
-        $results = $repo->filter($dto, $criterias);
+        $results = $this->characteristicRepo->filter($dto, $criterias);
 
         $collection = new CharOutCollection();
         foreach ($results as $entity) {
@@ -66,15 +69,14 @@ final class SelectChars implements ISelectChars
     public function singleChar(UuidVO $uuidVO): CharOutDto
     {
         /** @var Characteristics $entity */
-        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO);
-
+        $entity = $this->characteristicRepo->findOrFail($uuidVO);
         return (new CharacteristicEntityMapper($entity))->toDto();
     }
 
     public function rawChar(UuidVO $uuidVO): CharOutRawDto
     {
         /** @var Characteristics $entity */
-        $entity = $this->entityManager->getRepository(Characteristics::class)->findOrFail($uuidVO);
+        $entity = $this->characteristicRep->findOrFail($uuidVO);
 
         return (new CharacteristicEntityMapper($entity))->toRawDto();
     }

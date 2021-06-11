@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\ValueObjects\I18nMeasureUnitsFieldsVO;
+use App\Entity\ValueObjects\I18nMeasureUnitsVO;
 use App\Interfaces\Validatable;
 use App\Repository\MeasureUnitsRepository;
 use DateTimeInterface;
@@ -15,16 +16,16 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
  * @ORM\Table(
  *     name="measure_units",
  *     uniqueConstraints={
- *      @UniqueConstraint(name="measure_units_unique_id", columns={"id"})
+ *          @UniqueConstraint(name="measure_units_si_unique", columns={"si_name"})
  *     }
  * )
  */
 class MeasureUnits implements Validatable
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private int $id;
 
@@ -36,7 +37,7 @@ class MeasureUnits implements Validatable
     /**
      * @ORM\Column(type="I18nMeasureUnitsDbType", options={"jsonb":true, "default":"{}"})
      */
-    private I18nMeasureUnitsFieldsVO $i18n;
+    private I18nMeasureUnitsVO $i18n;
 
     /**
      * @ORM\Column(type="datetime", name="created_at")
@@ -77,9 +78,9 @@ class MeasureUnits implements Validatable
     }
 
     /**
-     * @return I18nMeasureUnitsFieldsVO
+     * @return I18nMeasureUnitsVO
      */
-    public function getI18n(): I18nMeasureUnitsFieldsVO
+    public function getI18n(): I18nMeasureUnitsVO
     {
         return $this->i18n;
     }

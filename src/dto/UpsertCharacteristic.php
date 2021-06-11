@@ -58,18 +58,28 @@ final class UpsertCharacteristic
     private AliasVO $attrName;
 
     /**
+     * @OA\Property(
+     *      type="string",
+     *      description="ID единицы измерения (пустая строка при отсутствии)"
+     * )
+     */
+    private ?int $measureUnit;
+
+    /**
      * UpsertCharacteristic constructor.
      * @param I18nCharVO $i18n
      * @param SearchPropertyVO $searchProperties
      * @param EnumVO $fieldType
      * @param AliasVO $attrName
+     * @param int|null $measureUnit
      */
-    public function __construct(I18nCharVO $i18n, SearchPropertyVO $searchProperties, EnumVO $fieldType, AliasVO $attrName)
+    public function __construct(I18nCharVO $i18n, SearchPropertyVO $searchProperties, EnumVO $fieldType, AliasVO $attrName, ?int $measureUnit)
     {
         $this->i18n = $i18n;
         $this->searchProperties = $searchProperties;
         $this->fieldType = $fieldType;
         $this->attrName = $attrName;
+        $this->measureUnit = $measureUnit;
     }
 
     /**
@@ -102,6 +112,14 @@ final class UpsertCharacteristic
     public function getAttrName(): AliasVO
     {
         return $this->attrName;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMeasureUnit(): ?int
+    {
+        return $this->measureUnit;
     }
 
 

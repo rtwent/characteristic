@@ -55,6 +55,15 @@ final class CharOutDto
 
     /**
      * @OA\Property(
+     *      description="Единица измерения характеристики",
+     *      type="string"
+     * )
+     * @Groups({"repCharValues"})
+     */
+    private ?string $measurement;
+
+    /**
+     * @OA\Property(
      *     ref=@Model(type=App\Entity\ValueObjects\SearchPropertyVO::class)
      * )
      */
@@ -68,8 +77,9 @@ final class CharOutDto
      * @param string $label
      * @param string $short
      * @param array $searchProps
+     * @param string $measurement
      */
-    public function __construct(Uuid $id, string $alias, string $type, string $label, string $short, array $searchProps)
+    public function __construct(Uuid $id, string $alias, string $type, string $label, string $short, array $searchProps, ?string $measurement)
     {
         $this->id = $id;
         $this->alias = $alias;
@@ -77,6 +87,7 @@ final class CharOutDto
         $this->label = $label;
         $this->short = $short;
         $this->searchProps = $searchProps;
+        $this->measurement = $measurement;
     }
 
     /**
@@ -125,6 +136,14 @@ final class CharOutDto
     public function getSearchProps(): array
     {
         return $this->searchProps;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMeasurement(): ?string
+    {
+        return $this->measurement;
     }
 
 

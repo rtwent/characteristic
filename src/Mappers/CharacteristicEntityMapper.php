@@ -31,7 +31,8 @@ final class CharacteristicEntityMapper
             $this->entity->getType()->getValue(),
             $this->entity->getI18n()->singleLanguage($lang)->getLabel(),
             $this->entity->getI18n()->singleLanguage($lang)->getShort(),
-            $this->entity->getProperty()->toArray()
+            $this->entity->getProperty()->toArray(),
+            $this->entity->getMeasureUnit()?->getI18n()?->singleLanguage($lang)?->getLabel()
         );
     }
 

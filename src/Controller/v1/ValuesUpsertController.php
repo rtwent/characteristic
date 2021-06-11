@@ -168,7 +168,7 @@ class ValuesUpsertController implements ValidatableRequest
      * )
      *
      * @Operation(
-     *     operationId="values_update",
+     *     operationId="values_delete",
      *     summary="Обновление значения характеристики",
      *     @OA\Response(
      *          response="202",

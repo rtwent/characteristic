@@ -234,6 +234,8 @@ class CharacteristicsUpsertController implements ValidatableRequest
 
         $formType = new EnumVO($requestArray['fieldType'], CharsTypeEnum::class);
 
-        return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attrName']));
+        $measureUnits = empty($requestArray['measureUnit']) ? null : (int)$requestArray['measureUnit'];
+
+        return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attrName']), $measureUnits);
     }
 }

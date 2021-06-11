@@ -19,18 +19,19 @@ POST {{host}}/characteristic
 Content-Type: application/json
 
 {
-  "attrName": "newattr",
+  "attrName": "newattr1",
   "i18n": {
     "ru": {
-      "label": "Новый аттрибут",
+      "label": "Новый аттрибут1",
       "short": "Новый"
     },
     "ua": {
-      "label": "Новий аттрибут",
+      "label": "Новий аттрибут1",
       "short": "Новмй"
     }
   },
   "fieldType": "fk",
+  "measureUnit": "2",
   "property": {
     "search": {
       "sort": 90,
@@ -43,11 +44,11 @@ Content-Type: application/json
 }
 
 ### update characteristic
-PUT {{host}}/characteristic/6ec30628-6e74-4f29-b401-95d2a2f9978f
+PUT {{host}}/characteristic/69835c9b-6622-4f76-ab66-53165da08aa7
 Content-Type: application/json
 
 {
-  "attrName": "newattr",
+  "attrName": "newattr2",
   "i18n": {
     "ru": {
       "label": "Новый аттр44",
@@ -59,6 +60,7 @@ Content-Type: application/json
     }
   },
   "fieldType": "string",
+  "measureUnit": "2",
   "property": {
     "search": {
       "sort": 12,

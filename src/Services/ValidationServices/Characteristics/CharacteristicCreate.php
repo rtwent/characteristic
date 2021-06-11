@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace App\Services\ValidationServices\Characteristics;
 
 use App\Enum\CharsTypeEnum;
-use App\Enum\InputTypeEnum;
 use App\Enum\LangsEnum;
 use App\Services\ValidationServices\AbstractServiceValidator;
+use App\Services\ValidationServices\CustomValidators\MeasureUnitExists;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -54,7 +54,10 @@ class CharacteristicCreate extends AbstractServiceValidator
                 new Assert\Type('string'),
                 new Assert\Choice(CharsTypeEnum::values())
             ]),
-            'property' => new Assert\NotBlank()
+            'property' => new Assert\NotBlank(),
+            'measureUnit' => new Assert\Sequentially([
+                new MeasureUnitExists(['entityManager' => $this->entityManager]),
+            ])
         ]);
     }
 }

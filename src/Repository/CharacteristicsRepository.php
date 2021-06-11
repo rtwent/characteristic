@@ -6,6 +6,7 @@ use App\dto\CharFilter;
 use App\dto\CharOutDto;
 use App\dto\UpsertCharacteristic;
 use App\Entity\Characteristics;
+use App\Entity\MeasureUnits;
 use App\Entity\ValueObjects\UuidVO;
 use App\Enum\CharsTypeEnum;
 use App\EventSubscriber\LocaleSetter;
@@ -107,10 +108,17 @@ class CharacteristicsRepository extends ServiceEntityRepository
 
     private function mutateEntity(Characteristics $entity, UpsertCharacteristic $characteristic): void
     {
+        /** @var  ?MeasureUnits $measureUnit */
+        $measureUnit = null;
+        if(!\is_null($characteristic->getMeasureUnit())) {
+            $measureUnit = $this->entityManager->getRepository(MeasureUnits::class)->find($characteristic->getMeasureUnit());
+        }
+
         $entity->setAlias($characteristic->getAttrName()->getValue());
         $entity->setI18n($characteristic->getI18n());
         $entity->setProperty($characteristic->getSearchProperties());
         $entity->setType(CharsTypeEnum::get($characteristic->getFieldType()->getEnumValue()));
+        $entity->setMeasureUnit($measureUnit);
 
         $this->validator->validateEntity($entity);
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\ValueObjects\I18nCharVO;
+use App\Entity\ValueObjects\I18nMeasureUnitsVO;
 use App\Entity\ValueObjects\SearchPropertyVO;
 use App\Enum\CharsTypeEnum;
 use App\Interfaces\Validatable;
@@ -47,9 +48,10 @@ class Characteristics implements Validatable
     private string $alias;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\MeasureUnits")
+     * @ORM\ManyToOne(targetEntity="App\Entity\MeasureUnits")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private MeasureUnits $measureUnit;
+    private ?MeasureUnits $measureUnit;
 
     /**
      * @ORM\Column(type="I18nCharDbType", options={"jsonb":true, "default":"{}"})
@@ -200,7 +202,7 @@ class Characteristics implements Validatable
     /**
      * @return MeasureUnits
      */
-    public function getMeasureUnit(): MeasureUnits
+    public function getMeasureUnit(): ?MeasureUnits
     {
         return $this->measureUnit;
     }
@@ -208,7 +210,7 @@ class Characteristics implements Validatable
     /**
      * @param MeasureUnits $measureUnit
      */
-    public function setMeasureUnit(MeasureUnits $measureUnit): void
+    public function setMeasureUnit(?MeasureUnits $measureUnit): void
     {
         $this->measureUnit = $measureUnit;
     }
