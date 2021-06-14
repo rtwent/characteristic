@@ -1,0 +1,43 @@
+### all measurement units with translation
+GET {{host}}/units/all?lang=ua
+Accept: application/json
+
+### single measurement units without translation
+GET {{host}}/units/2?lang=ua
+Accept: application/json
+
+### inserting new measurement unit
+POST {{host}}/units
+Content-Type: application/json
+
+{
+  "siName": "new",
+  "i18n": {
+    "ru": {
+      "label": "new"
+    },
+    "ua": {
+      "label": "new"
+    }
+  }
+}
+
+### updating measurement unit
+PUT {{host}}/units/7
+Content-Type: application/json
+
+{
+  "siName": "some",
+  "i18n": {
+    "ru": {
+      "label": "2new2"
+    },
+    "ua": {
+      "label": "2new"
+    }
+  }
+}
+
+### deleting measurement unit
+DELETE {{host}}/units/7
+Content-Type: application/json

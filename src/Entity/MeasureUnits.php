@@ -12,13 +12,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
- * @ORM\Entity(repositoryClass=MeasureUnitsRepository::class)
+ * @ORM\Entity(repositoryClass=App\Repository\MeasureUnitsRepository::class)
  * @ORM\Table(
  *     name="measure_units",
  *     uniqueConstraints={
  *          @UniqueConstraint(name="measure_units_si_unique", columns={"si_name"})
  *     }
  * )
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt")
  */
 class MeasureUnits implements Validatable
 {
@@ -86,9 +87,9 @@ class MeasureUnits implements Validatable
     }
 
     /**
-     * @param I18nMeasureUnitsFieldsVO $i18n
+     * @param I18nMeasureUnitsVO $i18n
      */
-    public function setI18n(I18nMeasureUnitsFieldsVO $i18n): void
+    public function setI18n(I18nMeasureUnitsVO $i18n): void
     {
         $this->i18n = $i18n;
     }

@@ -8,6 +8,7 @@ use App\Exceptions\InvalidArgument;
 use App\Exceptions\RequestValidation;
 use App\Interfaces\ValidatableRequest;
 use App\Services\ValidationServices\Characteristics\CharacteristicCreate;
+use App\Services\ValidationServices\MeasurementUnits\MeasurementUnitsCreate;
 use App\Services\ValidationServices\RepresentationValues\RepresentationValuesCreate;
 use App\Services\ValidationServices\Values\ValuesCreate;
 use ReflectionException;
@@ -45,6 +46,14 @@ class ValidateRequest implements EventSubscriberInterface
         ],
         'v1_representation_values_update' => [
             'class' => RepresentationValuesCreate::class,
+            'validatorArguments' => []
+        ],
+        'v1_units_create' => [
+            'class' => MeasurementUnitsCreate::class,
+            'validatorArguments' => []
+        ],
+        'v1_units_update' => [
+            'class' => MeasurementUnitsCreate::class,
             'validatorArguments' => []
         ],
 

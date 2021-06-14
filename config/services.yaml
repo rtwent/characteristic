@@ -38,3 +38,4 @@ services:
   App\Interfaces\Values\ISelectValues: '@App\Services\Values\SelectValues'
   App\Interfaces\Representations\ISelectRepresentation: '@App\Services\Representations\SelectRepresentation'
   App\Interfaces\Representations\IRepresentationValues: '@App\Services\RepresentationValues\RepresentationValuesUpsert'
+  App\Interfaces\MeasureUnits\IUnitsService: '@App\Services\MeasureUnits\MeasureUnits'

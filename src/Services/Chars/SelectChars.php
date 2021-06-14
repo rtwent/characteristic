@@ -19,6 +19,7 @@ use App\Repository\Criterias\Chars\AliasCriteria;
 use App\Repository\Criterias\CriteriasMerger;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 
 
 final class SelectChars implements ISelectChars
@@ -42,7 +43,7 @@ final class SelectChars implements ISelectChars
     /**
      * @param CharFilter $dto
      * @return CharOutCollection
-     * @throws ValueObjectConstraint
+     * @throws ValueObjectConstraint|QueryException
      */
     public function collection(CharFilter $dto): CharOutCollection
     {

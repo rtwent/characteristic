@@ -29,6 +29,14 @@ nelmio_api_doc:
                     schema:
                         type: string
                         example: 1a02151e-fa31-42df-8a55-318c6dd69334
+                PathId:
+                    in: path
+                    name: id
+                    description: ID объекта
+                    required: true
+                    schema:
+                        type: integer
+                        example: 1
                 PathUuidRepresentation:
                     in: path
                     name: repUuid
@@ -72,6 +80,13 @@ nelmio_api_doc:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UpsertCharacteristic'
+                UpsertMeasureUnit:
+                    description: Payload для создания, обновления единицы измерения
+                    required: true
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpsertMeasureUnit'
             securitySchemes:
                 Bearer:
                     type: http
@@ -118,8 +133,10 @@ nelmio_api_doc:
              - ^/characteristic/*
              - ^/rep*
              - ^/value*
+             - ^/units*
     models:
         names:
             - { alias: ErrorDto, type: App\dto\ErrorDto }
             - { alias: UpsertCharacteristic, type: App\dto\UpsertCharacteristic }
+            - { alias: UpsertMeasureUnit, type: App\dto\UpsertMeasureUnit }
             - { alias: Response202Dto, type: App\dto\Response202Dto }
