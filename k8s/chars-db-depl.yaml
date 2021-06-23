@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chars-postgres-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chars-postgres
+  template:
+    metadata:
+      labels:
+        app: chars-postgres
+    spec:
+      containers:
+        - name: postgres-container
+          image: postgres:13
+          envFrom:
+            - secretRef:
+                name: chars-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: chars-db
+      volumes:
+        - name: chars-db
+          persistentVolumeClaim:
+            claimName: chars-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chars-postgres-srv
+spec:
+  selector:
+    app: chars-postgres
+  ports:
+    - port: 5432
+      name: chars-postgres-port
+      targetPort: 5432

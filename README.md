@@ -10,9 +10,11 @@ All container configuration is in env file
     
     4. Run migrations `php bin/console doctrine:migrations:migrate`
     
-    5. Api documentation here http://localhost:{$PORT_NUMBER_FROM_ENV}/api/v1/doc.json
+    5. Api documentation here http://localhost:{$PORT_NUMBER_FROM_ENV}/chars/api/v1/doc.json
+
+    6. BasePath http://localhost:{$PORT_NUMBER_FROM_ENV}/chars/api
     
-    6. Test requests for phpStorm inside ~/apiRequest/* directory
+    7. Test requests for phpStorm inside ~/apiRequest/* directory
     
     
 @TODO
