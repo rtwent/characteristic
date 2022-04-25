@@ -15,7 +15,7 @@ server {
     }
 
     location ~ ^/index\.php(/|$) {
-            fastcgi_pass localhost:9000;
+            fastcgi_pass chars_php:9000;
             fastcgi_split_path_info ^(.+\.php)(/.*)$;
             include fastcgi_params;
             fastcgi_buffer_size 128k;
