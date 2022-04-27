@@ -6,6 +6,7 @@ namespace App\Mappers;
 use App\dto\CharOutDto;
 use App\dto\CharOutRawDto;
 use App\Entity\Characteristics;
+use App\Exceptions\ValueObjectConstraint;
 use App\Services\Locale\CurrentLanguage;
 
 final class CharacteristicEntityMapper
@@ -21,6 +22,9 @@ final class CharacteristicEntityMapper
         $this->entity = $entity;
     }
 
+    /**
+     * @throws ValueObjectConstraint
+     */
     public function toDto(): CharOutDto
     {
         $lang = CurrentLanguage::getInstance()->currentLang();

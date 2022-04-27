@@ -8,9 +8,11 @@ use App\Entity\Characteristics;
 use App\Entity\ValueObjects\UuidVO;
 use App\Entity\Values;
 use App\Mappers\ValuesEntityMapper;
+use App\Repository\Criterias\CriteriasMerger;
 use App\Services\EntityHelpers\EntityValidator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -34,9 +36,9 @@ class ValuesRepository extends ServiceEntityRepository
     private EntityValidator $validator;
 
     public function __construct(
-        ManagerRegistry $registry,
+        ManagerRegistry        $registry,
         EntityManagerInterface $entityManager,
-        EntityValidator $validator)
+        EntityValidator        $validator)
     {
         $this->validator = $validator;
         $this->entityManager = $entityManager;
@@ -77,6 +79,17 @@ class ValuesRepository extends ServiceEntityRepository
         }
 
         return $entity;
+    }
+
+    /**
+     * @param CriteriasMerger $criterias
+     * @return array
+     * @throws QueryException
+     */
+    public function filter(CriteriasMerger $criterias): array
+    {
+        $qb = $this->createQueryBuilder('v')->addCriteria($criterias->getCriteria());
+        return $qb->getQuery()->execute();
     }
 
     private function mutateEntity(Values $entity, UpsertValue $values): void

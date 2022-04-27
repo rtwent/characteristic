@@ -9,6 +9,7 @@ use App\Collections\ValueOutCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class CharWithValuesOutDto
 {
@@ -17,6 +18,7 @@ final class CharWithValuesOutDto
      *     ref=@Model(type=App\dto\CharOutDto::class)
      * )
      * @Groups({"repCharValues"})
+     * @SerializedName("characteristic")
      */
     private CharOutDto $charOutDto;
     /**
@@ -27,6 +29,7 @@ final class CharWithValuesOutDto
      *     )
      * )
      * @Groups({"repCharValues"})
+     * @SerializedName("vocabulary")
      */
     private ValueOutCollection $values;
 
@@ -52,7 +55,7 @@ final class CharWithValuesOutDto
     /**
      * @return ValueOutCollection
      */
-    public function getValues()
+    public function getValues(): ValueOutCollection
     {
         return $this->values;
     }

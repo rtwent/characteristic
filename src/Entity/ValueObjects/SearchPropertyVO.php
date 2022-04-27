@@ -11,6 +11,7 @@ use App\Enum\InputTypeEnum;
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ToArray;
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 final class SearchPropertyVO extends BaseValueObject implements ToArray
 {
@@ -19,6 +20,7 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
      *     type="integer",
      *     description="Дефолтный порядок сортировки"
      * )
+     * @Groups({"char:item:read"})
      */
     private int $sort;
     /**
@@ -26,6 +28,7 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
      *     type="string",
      *     description="Тип поля, который должен генерироваться на фронтенде"
      * )
+     * @Groups({"char:item:read"})
      */
     private ?string $input;
     /**
@@ -37,6 +40,7 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
      *          enum={"apartment", "house", "commercial", "apartment_complex"}
      *     )
      * )
+     * @Groups({"char:item:read"})
      */
     private RealtyTypesCollection $types;
     /**
@@ -48,6 +52,7 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
      *          enum={"secret", "main", "service", "additional", "rent"}
      *     )
      * )
+     * @Groups({"char:item:read"})
      */
     private RealtyCategoriesCollection $categories;
     /**
@@ -55,13 +60,14 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
      *     type="boolean",
      *     description="Является ли аттрибут секретным"
      * )
+     * @Groups({"char:item:read"})
      */
     private bool $isSecret;
 
     /**
      * SearchPropertyVO constructor.
      * @param int $sort
-     * @param string $input
+     * @param string|null $input
      * @param RealtyTypesCollection $types
      * @param RealtyCategoriesCollection $categories
      * @param bool $isSecret

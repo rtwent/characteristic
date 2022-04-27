@@ -10,6 +10,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class ValueOutDto
 {
@@ -18,7 +19,7 @@ class ValueOutDto
      *      description="Uuid значение характеристики",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
     private Uuid $id;
     /**
@@ -26,7 +27,9 @@ class ValueOutDto
      *      description="Полное название значения характеристики на текущей локали",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     *
+     * @SerializedName("name")
+     * @Groups({"repCharValues", "char:item:read"})
      */
     private string $label;
 
@@ -45,6 +48,7 @@ class ValueOutDto
      *      description="Дефолтная сортировка значение характеристики",
      *      type="integer"
      * )
+     * @Groups({"char:item:read"})
      */
     private int $defaultSort;
     /**
@@ -55,7 +59,7 @@ class ValueOutDto
      *          ref="#/components/schemas/RealtyTypeEnum"
      *      )
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
     private array $onlyType;
 

@@ -3,9 +3,11 @@
 namespace App\Controller\v1;
 
 use App\dto\CharFilter;
+use App\dto\CharOutDtoPlain;
 use App\Entity\ValueObjects\UuidVO;
 use App\Exceptions\ValueObjectConstraint;
 use App\Interfaces\ISelectChars;
+use App\Interfaces\Values\ISelectValues;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Security;
@@ -21,15 +23,17 @@ class CharacteristicsController
 {
     private ISelectChars $selectService;
     private NormalizerInterface $normalizer;
+    private ISelectValues $selectValues;
 
     /**
      * CharacteristicsController constructor.
      * @param ISelectChars $selectService
      */
-    public function __construct(ISelectChars $selectService, NormalizerInterface $normalizer)
+    public function __construct(ISelectChars $selectService, NormalizerInterface $normalizer, ISelectValues $selectValues)
     {
         $this->selectService = $selectService;
         $this->normalizer = $normalizer;
+        $this->selectValues = $selectValues;
     }
 
 
@@ -48,7 +52,7 @@ class CharacteristicsController
      *          response="200",
      *          description="Единичная характеристика в зависимости от локали",
      *          @OA\JsonContent(
-     *              ref=@Model(type=App\dto\CharOutDto::class)
+     *              ref=@Model(type=App\dto\CharOutDtoPlain::class, groups={"char:item:read"})
      *          )
      *      ),
      *      @OA\Response(
@@ -79,9 +83,21 @@ class CharacteristicsController
      */
     public function singleByUuid(string $uuid): Response
     {
-        $dto = $this->selectService->singleChar(new UuidVO($uuid));
+        $characteristicDto = $this->selectService->singleChar(new UuidVO($uuid));
+        $vocabularyValues = $this->selectValues->getValuesByChar(new UuidVO($uuid));
 
-        return new JsonResponse($this->normalizer->normalize($dto));
+        $dto = new CharOutDtoPlain(
+            $characteristicDto->getId(),
+            $characteristicDto->getAlias(),
+            $characteristicDto->getType(),
+            $characteristicDto->getLabel(),
+            $characteristicDto->getShort(),
+            $characteristicDto->getSearchProps(),
+            $characteristicDto->getMeasurement(),
+            $vocabularyValues
+        );
+
+        return new JsonResponse($this->normalizer->normalize($dto, null, ['groups' => 'char:item:read']));
     }
 
     /**

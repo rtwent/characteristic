@@ -97,7 +97,8 @@ class RepresentationController
             new UuidVO($repUuid),
             new UuidVO($charUuid)
         );
-        return new JsonResponse($this->normalizer->normalize($dto, null, ['groups' => 'repCharValues']));
+
+        return new JsonResponse($this->normalizer->normalize($dto->offsetGet(0), null, ['groups' => 'repCharValues']));
     }
 
     /**

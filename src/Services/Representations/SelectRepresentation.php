@@ -81,6 +81,13 @@ final class SelectRepresentation implements ISelectRepresentation
         return $this->getCharWithValuesCollection($representation);
     }
 
+    /**
+     * @param UuidVO $representation
+     * @param UuidVO $characteristic
+     * @return CharWithValuesOutCollection
+     * @throws InvalidDbValue
+     * @throws ValueObjectConstraint
+     */
     public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): CharWithValuesOutCollection
     {
         $criterias = new CriteriasMerger(Criteria::create());

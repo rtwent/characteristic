@@ -31,9 +31,9 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: chars-srv
+                name: chars2-srv
                 port:
-                  number: 3000
+                  number: 8115
                   
           - path: /api/v1/tests
             pathType: Prefix

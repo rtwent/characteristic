@@ -116,7 +116,7 @@ class RepresentationRepository extends ServiceEntityRepository
     {
         $representation = $qb->getQuery()->getOneOrNullResult();
         if (\is_null($representation)) {
-            throw new HttpException(Response::HTTP_NOT_FOUND, "Representation was not found");
+            throw new HttpException(Response::HTTP_NOT_FOUND, "Representation or bound to representation entity was not found");
         }
 
         return $representation;

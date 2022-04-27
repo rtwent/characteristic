@@ -9,65 +9,68 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class CharOutDto
+class CharOutDto
 {
     /**
      * @OA\Property(
      *      description="Uuid характеристики",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private Uuid $id;
+    protected Uuid $id;
     /**
      * @OA\Property(
      *      description="Уникальный псевдоним характеристики",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private string $alias;
+    protected string $alias;
     /**
      * @OA\Property(
      *      description="Тип характеристики. Используется для вычисления типа переменной, в которой себе хранит характеристика",
      *     ref="#/components/schemas/DataTypeEnum"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private string $type;
+    protected string $type;
     /**
      * @OA\Property(
      *      description="Полное название характеристики на текущей локали",
-     *      type="string"
+     *      type="string",
      * )
-     * @Groups({"repCharValues"})
+     * @SerializedName("name")
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private string $label;
+    protected string $label;
     /**
      * @OA\Property(
      *      description="Короткое название характеристики на текущей локали",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private string $short;
+    protected string $short;
 
     /**
      * @OA\Property(
      *      description="Единица измерения характеристики",
      *      type="string"
      * )
-     * @Groups({"repCharValues"})
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private ?string $measurement;
+    protected ?string $measurement;
 
     /**
      * @OA\Property(
      *     ref=@Model(type=App\Entity\ValueObjects\SearchPropertyVO::class)
      * )
+     * @Groups({"repCharValues", "char:item:read"})
      */
-    private array $searchProps;
+    protected array $searchProps;
 
     /**
      * CharOutDto constructor.
@@ -77,7 +80,7 @@ final class CharOutDto
      * @param string $label
      * @param string $short
      * @param array $searchProps
-     * @param string $measurement
+     * @param string|null $measurement
      */
     public function __construct(Uuid $id, string $alias, string $type, string $label, string $short, array $searchProps, ?string $measurement)
     {
@@ -139,7 +142,7 @@ final class CharOutDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMeasurement(): ?string
     {
