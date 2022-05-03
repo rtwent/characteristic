@@ -6,6 +6,7 @@ namespace App\EventSubscriber;
 
 use App\Exceptions\InvalidArgument;
 use App\Exceptions\RequestValidation;
+use App\Exceptions\WrongRequest;
 use App\Interfaces\ValidatableRequest;
 use App\Services\ValidationServices\Characteristics\CharacteristicCreate;
 use App\Services\ValidationServices\MeasurementUnits\MeasurementUnitsCreate;
@@ -126,7 +127,7 @@ class ValidateRequest implements EventSubscriberInterface
         $errors = $validator->validate($requestData);
 
         if (count($errors) > 0) {
-            throw new RequestValidation(implode(", ", $errors), null, [], Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw new WrongRequest(implode(", ", $errors), null, [], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
 

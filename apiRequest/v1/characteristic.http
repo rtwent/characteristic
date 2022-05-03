@@ -30,14 +30,14 @@ Content-Type: application/json
       "short": "test"
     }
   },
-  "fieldType": "test",
+  "fieldType": "json",
   "measureUnit": "1",
   "property": {
     "search": {
       "sort": "1",
-      "input": "asd",
-      "types": ["00ff1b37-3060-4058-8377-4f9a0973bb5b", "17230889-2283-4ba69842-06a8d67f33a2"],
-      "categories": ["7cb390e1-51af-43bc-95bf-d8d7ffa333ac", "7cb390e1-51af-43bc-95bf-d8d7ffa333ad"],
+      "input": "text",
+      "types": ["apartment", "house"],
+      "categories": ["secret"],
       "secret": true
     }
   }

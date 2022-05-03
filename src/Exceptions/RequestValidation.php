@@ -7,6 +7,9 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated see App\Exceptions\WrongRequest
+ */
 final class RequestValidation extends \Symfony\Component\HttpKernel\Exception\HttpException
 {
     public function __construct(string $message = null, \Throwable $previous = null, array $headers = [], ?int $code = 0)

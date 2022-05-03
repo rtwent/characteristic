@@ -15,6 +15,7 @@ use App\Entity\ValueObjects\UuidVO;
 use App\Enum\CharsTypeEnum;
 use App\Enum\LangsEnum;
 use App\Exceptions\ValueObjectConstraint;
+use App\Exceptions\WrongRequest;
 use App\Interfaces\Chars\IUpsertService;
 use App\Interfaces\ValidatableRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -216,25 +217,29 @@ class CharacteristicsUpsertController implements ValidatableRequest
         }
         $i18n = new I18nCharVO($i18nFields);
 
-        $typeValues = $requestArray['property']['search']['types'] ?? [];
-        $realtyTypes = new RealtyTypesCollection();
-        array_map(fn($type) => $realtyTypes->append($type), $typeValues);
+        try {
+            $typeValues = $requestArray['property']['search']['types'] ?? [];
+            $realtyTypes = new RealtyTypesCollection();
+            array_map(fn($type) => $realtyTypes->append($type), $typeValues);
 
-        $categoryValues = $requestArray['property']['search']['categories'] ?? [];
-        $categories = new RealtyCategoriesCollection();
-        array_map(fn($type) => $categories->append($type), $categoryValues);
+            $categoryValues = $requestArray['property']['search']['categories'] ?? [];
+            $categories = new RealtyCategoriesCollection();
+            array_map(fn($type) => $categories->append($type), $categoryValues);
 
-        $searchPropertyVo = new SearchPropertyVO(
-            $requestArray['property']['search']['sort'] ?? 0,
-            $requestArray['property']['search']['input'] ?? 'text',
-            $realtyTypes,
-            $categories,
-            $requestArray['property']['search']['secret'] ?? false,
-        );
+            $searchPropertyVo = new SearchPropertyVO(
+                $requestArray['property']['search']['sort'] ?? 0,
+                $requestArray['property']['search']['input'] ?? 'text',
+                $realtyTypes,
+                $categories,
+                $requestArray['property']['search']['secret'] ?? false,
+            );
 
-        $formType = new EnumVO($requestArray['fieldType'], CharsTypeEnum::class);
+            $formType = new EnumVO($requestArray['fieldType'], CharsTypeEnum::class);
 
-        $measureUnits = empty($requestArray['measureUnit']) ? null : (int)$requestArray['measureUnit'];
+            $measureUnits = empty($requestArray['measureUnit']) ? null : (int)$requestArray['measureUnit'];
+        } catch (\Throwable $e) {
+            throw new WrongRequest($e->getMessage());
+        }
 
         return new UpsertCharacteristic($i18n, $searchPropertyVo, $formType, new AliasVO($requestArray['attrName']), $measureUnits);
     }

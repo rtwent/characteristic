@@ -6,6 +6,7 @@ namespace App\Services\ValidationServices\CustomValidators;
 
 use App\Entity\Characteristics;
 use App\Entity\MeasureUnits;
+use App\Exceptions\WrongRequest;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -29,6 +30,10 @@ final class MeasureUnitExistsValidator extends ConstraintValidator
 
         if (null === $value || '' === $value) {
             return;
+        }
+
+        if(!is_numeric($value)) {
+            throw new WrongRequest("Measure unit id must be integer");
         }
 
         $measureUnitEntity = $constraint->getEntityManager()

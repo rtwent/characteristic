@@ -52,7 +52,10 @@ class CharacteristicCreate extends AbstractServiceValidator
             ]),
             'fieldType' => new Assert\Required([
                 new Assert\Type('string'),
-                new Assert\Choice(CharsTypeEnum::values())
+                new Assert\Choice([
+                    'choices' => CharsTypeEnum::values(),
+                    'message' => sprintf("The value you selected is not a valid choice. (%s) are only accepted", implode(", ", CharsTypeEnum::values())),
+                ])
             ]),
             'property' => new Assert\NotBlank(),
             'measureUnit' => new Assert\Sequentially([

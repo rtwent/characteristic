@@ -114,6 +114,9 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
         return $returnArray;
     }
 
+    /**
+     * @throws ValueObjectConstraint
+     */
     private function setInput(?string $value): ?string
     {
         if (\is_null($value)) {
@@ -121,7 +124,7 @@ final class SearchPropertyVO extends BaseValueObject implements ToArray
         }
 
         if (!InputTypeEnum::accepts($value)) {
-            throw new ValueObjectConstraint(sprintf("Value %s does not exist in InputTypeEnum", $value));
+            throw new ValueObjectConstraint(sprintf("Value %s does not exist in InputTypeEnum. (%s) are only allowed", $value, implode(", ", InputTypeEnum::values())));
         }
 
         return $value;
