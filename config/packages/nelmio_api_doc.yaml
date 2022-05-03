@@ -11,6 +11,8 @@ nelmio_api_doc:
             - { name: Характеристики, description: Функционал по управлению характеристиками }
             - { name: Наборы для представительств, description: Функционал для выбора характеристик и их значений на основе представительства }
             - { name: Словарные данные, description: Функционал для обработки словарного значения }
+            - { name: Единицы измерения, description: Единица измерения характеристики }
+            - { name: Выпадающие списки, description: Отображение выпадающих списков }
         components:
             parameters:
                 Language:
@@ -129,11 +131,11 @@ nelmio_api_doc:
             - Bearer: []
     areas: # to filter documented areas
         path_patterns:
-#            - ^/api/v1/(?!/doc.json$) # Accepts routes under /api except /api/doc
-             - ^/characteristic/*
-             - ^/rep*
-             - ^/value*
-             - ^/units*
+            - ^/api/v1/chars/(?!/doc.json$) # Accepts routes under /api except /api/doc
+#             - ^/characteristic/*
+#             - ^/rep*
+#             - ^/value*
+#             - ^/units*
     models:
         names:
             - { alias: ErrorDto, type: App\dto\ErrorDto }

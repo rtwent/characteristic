@@ -19,25 +19,25 @@ POST {{host}}/characteristic
 Content-Type: application/json
 
 {
-  "attrName": "newattr1",
+  "attrName": "test",
   "i18n": {
     "ru": {
-      "label": "Новый аттрибут1",
-      "short": "Новый"
+      "label": "test",
+      "short": "test"
     },
     "ua": {
-      "label": "Новий аттрибут1",
-      "short": "Новмй"
+      "label": "test",
+      "short": "test"
     }
   },
-  "fieldType": "fk",
-  "measureUnit": "2",
+  "fieldType": "test",
+  "measureUnit": "1",
   "property": {
     "search": {
-      "sort": 90,
-      "input": "text",
-      "types": ["apartment", "apartment_complex"],
-      "categories": ["secret"],
+      "sort": "1",
+      "input": "asd",
+      "types": ["00ff1b37-3060-4058-8377-4f9a0973bb5b", "17230889-2283-4ba69842-06a8d67f33a2"],
+      "categories": ["7cb390e1-51af-43bc-95bf-d8d7ffa333ac", "7cb390e1-51af-43bc-95bf-d8d7ffa333ad"],
       "secret": true
     }
   }

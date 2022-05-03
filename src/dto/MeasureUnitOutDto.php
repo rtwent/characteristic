@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\dto;
 
 use OpenApi\Annotations as OA;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class MeasureUnitOutDto
 {
@@ -27,6 +28,7 @@ final class MeasureUnitOutDto
      *      description="Перевод хаарктеристики на язык локали",
      *      type="string"
      * )
+     * @SerializedName("name")
      */
     private string $label;
 

@@ -1,0 +1,27 @@
+# types of characteristics
+boolean: Логическое значение
+float: Число с плавающей точкой
+int: Целое число
+string: Произвольная строка
+fk: Словарные данные
+json: Набор json
+array:  Массив
+# search categories
+secret: Секрет
+main: Основная
+service: Служебная
+additional: Дополнительная
+rent: Аренда
+servicebuyer: Служебная покупатель
+# realty types
+apartment: квартиры
+house: дома участки
+commercial: коммерческая
+apartment_complex: новостройки
+# input types
+text: Произвольный текст
+select: Выпадающий список
+select2: Выпадающий список с плагином
+date-min-max: Диапазон дат
+number-min-max: Диапазон чисел
+checkbox: Логическое значение

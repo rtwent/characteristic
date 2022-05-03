@@ -28,6 +28,8 @@ class CharacteristicsController
     /**
      * CharacteristicsController constructor.
      * @param ISelectChars $selectService
+     * @param NormalizerInterface $normalizer
+     * @param ISelectValues $selectValues
      */
     public function __construct(ISelectChars $selectService, NormalizerInterface $normalizer, ISelectValues $selectValues)
     {

@@ -24,7 +24,8 @@ class LocaleSetter implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::REQUEST => ['onKernelRequest', 12],
+            // listener priority to a higher value than LocaleListener priority see php bin/console debug:event kernel.request
+            KernelEvents::REQUEST => ['onKernelRequest', 120],
         ];
     }
 
