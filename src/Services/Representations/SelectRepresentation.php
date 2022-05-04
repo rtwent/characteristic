@@ -22,6 +22,7 @@ use App\Repository\Criterias\Representations\CharCriteria;
 use App\Repository\Criterias\Representations\UuidCriteria;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 
 final class SelectRepresentation implements ISelectRepresentation
@@ -84,20 +85,24 @@ final class SelectRepresentation implements ISelectRepresentation
     /**
      * @param UuidVO $representation
      * @param UuidVO $characteristic
-     * @return CharWithValuesOutCollection
+     * @return CharWithValuesOutCollection|null
      * @throws InvalidDbValue
      * @throws ValueObjectConstraint
      */
-    public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): CharWithValuesOutCollection
+    public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): ?CharWithValuesOutDto
     {
         $criterias = new CriteriasMerger(Criteria::create());
         $criterias->add(new UuidCriteria($representation));
         $criterias->add(new CharCriteria($characteristic));
 
-        $representation = $this->entityManager->getRepository(Representation::class)
-            ->valuesByCharacteristic($criterias);
+        try {
+            $representation = $this->entityManager->getRepository(Representation::class)
+                ->valuesByCharacteristic($criterias);
+        } catch (HttpException $e) {
+            return null;
+        }
 
-        return $this->getCharWithValuesCollection($representation);
+        return ($this->getCharWithValuesCollection($representation))->offsetGet(0);
     }
 
     /**

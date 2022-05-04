@@ -3,6 +3,7 @@
 namespace App\Interfaces\Representations;
 
 use App\Collections\CharWithValuesOutCollection;
+use App\dto\CharWithValuesOutDto;
 use App\dto\ValuesBySearchCategories;
 use App\Entity\ValueObjects\RealtyTypeVO;
 use App\Entity\ValueObjects\UuidVO;
@@ -15,5 +16,5 @@ interface ISelectRepresentation
 
     public function valuesBySearchCategory(ValuesBySearchCategories $dto): CharWithValuesOutCollection;
 
-    public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): CharWithValuesOutCollection;
+    public function valuesByCharacteristic(UuidVO $representation, UuidVO $characteristic): ?CharWithValuesOutDto;
 }

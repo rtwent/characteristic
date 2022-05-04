@@ -54,10 +54,7 @@ class RepresentationController
      *          response="200",
      *          description="Набор характеристик и их значений в зависимости от локали",
      *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(
      *                  ref=@Model(type=App\dto\CharWithValuesOutDto::class, groups={"repCharValues"})
-     *              )
      *          )
      *      ),
      *      @OA\Response(
@@ -98,7 +95,7 @@ class RepresentationController
             new UuidVO($charUuid)
         );
 
-        return new JsonResponse($this->normalizer->normalize($dto->offsetGet(0), null, ['groups' => 'repCharValues']));
+        return new JsonResponse($this->normalizer->normalize($dto , null, ['groups' => 'repCharValues']));
     }
 
     /**

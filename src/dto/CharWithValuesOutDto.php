@@ -15,7 +15,9 @@ final class CharWithValuesOutDto
 {
     /**
      * @OA\Property(
-     *     ref=@Model(type=App\dto\CharOutDto::class)
+     *     type="object",
+     *     nullable=true,
+     *     ref=@Model(type=App\dto\CharOutDto::class),
      * )
      * @Groups({"repCharValues"})
      * @SerializedName("characteristic")
@@ -24,6 +26,7 @@ final class CharWithValuesOutDto
     /**
      * @OA\Property(
      *     type="array",
+     *     nullable=true,
      *     @OA\Items(
      *          ref=@Model(type=App\dto\ValueOutDto::class)
      *     )

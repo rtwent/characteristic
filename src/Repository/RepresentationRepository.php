@@ -9,6 +9,7 @@ use App\Entity\ValueObjects\UuidVO;
 use App\Repository\Criterias\CriteriasMerger;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,12 @@ class RepresentationRepository extends ServiceEntityRepository
         return $this->findOrFailByQueryBuilder($qb);
     }
 
+    /**
+     * @param CriteriasMerger $criterias
+     * @return Representation
+     * @throws NonUniqueResultException
+     * @throws QueryException
+     */
     public function valuesByCharacteristic(CriteriasMerger $criterias)
     {
         $qb = $this->getBaseDQlQuery();

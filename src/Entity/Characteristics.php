@@ -200,7 +200,7 @@ class Characteristics implements Validatable
     }
 
     /**
-     * @return MeasureUnits
+     * @return MeasureUnits|null
      */
     public function getMeasureUnit(): ?MeasureUnits
     {

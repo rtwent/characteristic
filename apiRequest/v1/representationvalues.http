@@ -56,4 +56,8 @@ Accept: application/json
 DELETE {{host}}/repvalues/20709
 Accept: application/json
 
+### Get chars of the representation
+GET {{host}}/rep/bychar/30007f41-7c2d-4849-8306-fddfbb6bf18a/9f2240e4-c8aa-42df-8076-f078d9d94353
+Accept: application/json
+
 
