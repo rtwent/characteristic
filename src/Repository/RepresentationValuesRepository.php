@@ -9,11 +9,14 @@ use App\Entity\Representation;
 use App\Entity\RepresentationValues;
 use App\Entity\ValueObjects\RepCharValuesCollectionVO;
 use App\Exceptions\ValueObjectConstraint;
+use App\Exceptions\WrongRequest;
 use App\Mappers\RepCharsEntityMapper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @method RepresentationValues|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,8 +26,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class RepresentationValuesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private ValidatorInterface $validator;
+
+    public function __construct(ManagerRegistry $registry, ValidatorInterface $validator)
     {
+        $this->validator = $validator;
         parent::__construct($registry, RepresentationValues::class);
     }
 
@@ -40,7 +46,7 @@ class RepresentationValuesRepository extends ServiceEntityRepository
 
     }
 
-    public function update(int $id, UpsertCharValuesDto $dto)
+    public function update(int $id, UpsertCharValuesDto $dto): RepCharValuesOutDto
     {
         $entity = $this->findOrFail($id);
         $this->mutateEntity($entity, $dto);
@@ -80,6 +86,17 @@ class RepresentationValuesRepository extends ServiceEntityRepository
         $entity->setCharacteristic($characteristic);
         $entity->setRepCharValues(new RepCharValuesCollectionVO($dto->getRepCharValues()->getArrayCopy()));
         $entity->setSettings($dto->getSettings());
+
+        $errors = $this->validator->validate($entity);
+
+        if (count($errors) > 0) {
+            $message = "";
+            foreach ($errors as $key => $error) {
+                $message .= $error->getMessage();
+            }
+            throw new WrongRequest($message, null, [], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
     }
 
 }

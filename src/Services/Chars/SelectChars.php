@@ -20,6 +20,7 @@ use App\Repository\Criterias\CriteriasMerger;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 final class SelectChars implements ISelectChars
@@ -31,12 +32,15 @@ final class SelectChars implements ISelectChars
 
     private CharacteristicsRepository $characteristicRepo;
 
+    private TranslatorInterface $translator;
+
     /**
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
+        $this->translator = $translator;
         $this->characteristicRepo = $this->entityManager->getRepository(Characteristics::class);
     }
 
@@ -77,8 +81,8 @@ final class SelectChars implements ISelectChars
     public function rawChar(UuidVO $uuidVO): CharOutRawDto
     {
         /** @var Characteristics $entity */
-        $entity = $this->characteristicRep->findOrFail($uuidVO);
+        $entity = $this->characteristicRepo->findOrFail($uuidVO);
 
-        return (new CharacteristicEntityMapper($entity))->toRawDto();
+        return (new CharacteristicEntityMapper($entity))->toRawDto($this->translator);
     }
 }

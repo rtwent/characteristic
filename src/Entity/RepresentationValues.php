@@ -2,19 +2,31 @@
 
 namespace App\Entity;
 
-use App\Collections\ValueOutCollection;
 use App\Entity\ValueObjects\RepCharValuePropertiesVO;
 use App\Entity\ValueObjects\RepCharValuesCollectionVO;
 use App\Entity\ValueObjects\RepCharValueSettingsVO;
-use App\Entity\ValueObjects\RepCharValuesVO;
 use App\Exceptions\InvalidDbValue;
-use App\Mappers\ValuesEntityMapper;
 use App\Repository\RepresentationValuesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\Index;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=RepresentationValuesRepository::class)
+ * @ORM\Table(
+ *     uniqueConstraints={
+ *          @UniqueConstraint(name="representation_characteristic", columns={"fk_rep_uuid", "fk_characteristic"})
+ *     },
+ *     indexes={
+ *         @Index(name="representation_values_char_idx", columns={"fk_characteristic"}),
+ *         @Index(name="representation_values_representation_idx", columns={"fk_rep_uuid"}),
+ *     }
+ * )
+ *
+ * @UniqueEntity(fields={"representation", "characteristic"}, message="Combination of representation and characteristic is already in use")
  */
 class RepresentationValues
 {
