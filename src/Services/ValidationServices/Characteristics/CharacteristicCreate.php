@@ -44,7 +44,7 @@ class CharacteristicCreate extends AbstractServiceValidator
         return new Assert\Collection([
             'attrName' => new Assert\Required([
                 new Assert\Type('string'),
-                new Assert\Regex('/^[ -a-zA-Zа-яА-я0-9]+$/')
+                new Assert\Regex('/^[_a-z]+$/', 'Must contain only a-z letters in lowercase')
             ]),
             'i18n' => new Assert\Required([
                 new Assert\Type('array'),

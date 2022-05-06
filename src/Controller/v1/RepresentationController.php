@@ -54,7 +54,7 @@ class RepresentationController
      *          response="200",
      *          description="Набор характеристик и их значений в зависимости от локали",
      *          @OA\JsonContent(
-     *                  ref=@Model(type=App\dto\CharWithValuesOutDto::class, groups={"repCharValues"})
+     *                  ref=@Model(type=App\dto\CharWithValuesForRepresentationOutDto::class, groups={"repCharValues"})
      *          )
      *      ),
      *      @OA\Response(

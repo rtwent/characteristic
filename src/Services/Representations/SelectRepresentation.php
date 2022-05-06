@@ -6,6 +6,7 @@ namespace App\Services\Representations;
 
 use App\Collections\CharWithValuesOutCollection;
 use App\Collections\ValueOutCollection;
+use App\dto\CharWithValuesForRepresentationOutDto;
 use App\dto\CharWithValuesOutDto;
 use App\dto\ValuesBySearchCategories;
 use App\Entity\Representation;
@@ -102,7 +103,14 @@ final class SelectRepresentation implements ISelectRepresentation
             return null;
         }
 
-        return ($this->getCharWithValuesCollection($representation))->offsetGet(0);
+        /** @var CharWithValuesOutDto $charValuesDto */
+        $charValuesDto = ($this->getCharWithValuesCollection($representation))->offsetGet(0);
+
+        return new CharWithValuesForRepresentationOutDto(
+            $charValuesDto->getCharOutDto(),
+            $charValuesDto->getValues(),
+            $representation->getRepCharacteristics()->offsetGet(0)->getId()
+        );
     }
 
     /**

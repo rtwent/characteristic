@@ -19,28 +19,32 @@ POST {{host}}/characteristic
 Content-Type: application/json
 
 {
-  "attrName": "test",
   "i18n": {
     "ru": {
-      "label": "test",
-      "short": "test"
+      "label": "Фесенко Геннадий111",
+      "short": "Фесенко Геннадий111"
     },
     "ua": {
-      "label": "test",
-      "short": "test"
+      "label": "Фесенко Геннадий111",
+      "short": "Фесенко Геннадий1111"
     }
   },
-  "fieldType": "json",
-  "measureUnit": "1",
   "property": {
     "search": {
       "sort": "1",
-      "input": "text",
-      "types": ["apartment", "house"],
-      "categories": ["secret"],
+      "input": "select",
+      "types": [
+        "house"
+      ],
+      "categories": [
+        "service"
+      ],
       "secret": true
     }
-  }
+  },
+  "fieldType": "json",
+  "attrName": "df",
+  "measureUnit": "2"
 }
 
 ### update characteristic
@@ -65,8 +69,12 @@ Content-Type: application/json
     "search": {
       "sort": 12,
       "input": "text",
-      "types": ["apartment"],
-      "categories": ["service"],
+      "types": [
+        "apartment"
+      ],
+      "categories": [
+        "service"
+      ],
       "secret": true
     }
   }

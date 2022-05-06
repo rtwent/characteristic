@@ -11,7 +11,7 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-final class CharWithValuesOutDto
+class CharWithValuesOutDto
 {
     /**
      * @OA\Property(
@@ -22,7 +22,7 @@ final class CharWithValuesOutDto
      * @Groups({"repCharValues"})
      * @SerializedName("characteristic")
      */
-    private CharOutDto $charOutDto;
+    protected CharOutDto $charOutDto;
     /**
      * @OA\Property(
      *     type="array",
@@ -34,7 +34,7 @@ final class CharWithValuesOutDto
      * @Groups({"repCharValues"})
      * @SerializedName("vocabulary")
      */
-    private ValueOutCollection $values;
+    protected ValueOutCollection $values;
 
     /**
      * CharWithValuesOutDto constructor.
