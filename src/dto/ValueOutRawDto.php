@@ -111,11 +111,11 @@ final class ValueOutRawDto
     }
 
     /**
-     * @return I18nValuesVO
+     * @return array
      */
-    public function getI18n(): I18nValuesVO
+    public function getI18n(): array
     {
-        return $this->i18n;
+        return $this->i18n->toArray();
     }
 
     /**
