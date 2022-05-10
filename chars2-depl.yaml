@@ -57,7 +57,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: "nginx-configmap"
+  name: "nginx-chars-configmap"
 data:
   nginx.conf: |
     server {
@@ -153,17 +153,17 @@ spec:
         - name: regcred
       volumes:
         # диреткория для assets которую генерирует php
-        - name: shared-files
+        - name: shared-char2-files
           emptyDir: { }
-        - name: nginx-config
+        - name: nginx-chars2-config
           configMap:
-            name: nginx-configmap
+            name: nginx-chars-configmap
       containers:
         - name: chars2-php
           image: at1anta/chars2-service:latest
           imagePullPolicy: Always
           volumeMounts:
-            - name: shared-files
+            - name: shared-char2-files
               mountPath: /var/www/html
           env:
             - name: DATABASE_URL
@@ -179,9 +179,9 @@ spec:
             - containerPort: 8115
           imagePullPolicy: Always
           volumeMounts:
-            - name: shared-files
+            - name: shared-char2-files
               mountPath: /var/www/html
-            - name: nginx-config
+            - name: nginx-chars2-config
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: nginx.conf
 

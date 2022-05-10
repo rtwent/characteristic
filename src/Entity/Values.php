@@ -96,7 +96,7 @@ class Values implements Validatable
     private int $oldVectorId;
 
     /**
-     * @var RepCharValuePropertiesVO
+     * @var RepCharValuePropertiesVO|null
      */
     private ?RepCharValuePropertiesVO $representationSpecific = null;
 

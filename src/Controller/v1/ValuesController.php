@@ -79,4 +79,47 @@ class ValuesController
         return new JsonResponse($this->normalizer->normalize($dto));
     }
 
+    /**
+    /**
+     * @Route(
+     *     "/value/raw/{uuid}",
+     *     name="values_raw_single",
+     *     methods={"GET"},
+     *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"}
+     * )
+     *
+     * @Operation(
+     *     operationId="values_raw_single",
+     *     summary="Получение единичного словарного значения по id без учета локали",
+     *     @OA\Response(
+     *          response="200",
+     *          description="Единичное словарное значение",
+     *          @OA\JsonContent(
+     *              ref=@Model(type=App\dto\ValueOutRawDto::class)
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"
+     *      ),
+     * )
+     *
+     * @OA\Tag(name="Словарные данные")
+     *
+     * @OA\Parameter(
+     *     ref="#/components/parameters/PathUuid"
+     * )
+     *
+     * @param string $uuid
+     * @return Response
+     * @throws ExceptionInterface
+     * @throws ValueObjectConstraint
+     */
+    public function singleRawByUuid(string $uuid): Response
+    {
+        $dto = $this->selectService->singleRawChar(new UuidVO($uuid));
+
+        return new JsonResponse($this->normalizer->normalize($dto));
+    }
+
 }

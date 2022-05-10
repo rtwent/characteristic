@@ -50,3 +50,7 @@ Content-Type: application/json
 GET {{host}}/value/eccb4388-10c6-4f12-8d5d-ff73b771adb1?lang=ua
 Accept: application/json
 
+### single value by uuid without translation
+GET {{host}}/value/raw/002347e4-f306-4d69-b9de-e9f2d8aa6f88
+Accept: application/json
+

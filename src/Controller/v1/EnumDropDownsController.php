@@ -57,7 +57,6 @@ class EnumDropDownsController
      *     ref="#/components/parameters/Language"
      * )
      *
-     *
      * @Security(name="Bearer")
      *
      * @return Response

@@ -12,7 +12,7 @@ use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class ValueOutDto
+final class ValueOutDto
 {
     /**
      * @OA\Property(
@@ -89,12 +89,12 @@ class ValueOutDto
      * @param RepCharValuePropertiesVO|null $specific
      */
     public function __construct(
-        Uuid $id,
-        string $label,
-        int $key,
-        int $defaultSort,
-        array $onlyType,
-        CharOutDto $char,
+        Uuid                      $id,
+        string                    $label,
+        int                       $key,
+        int                       $defaultSort,
+        array                     $onlyType,
+        CharOutDto                $char,
         ?RepCharValuePropertiesVO $specific
     )
     {
