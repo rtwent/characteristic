@@ -18,37 +18,31 @@ Accept: application/json
   ],
   "settings": {
     "rowId": 0,
-    "rowOrder": 0,
-    "types": [
-      "apartment"
-    ]
+    "rowOrder": 0
   }
 }
 
 ### update chars with values for representation
-PUT {{host}}/repvalues/20709
+PUT {{host}}/repvalues/5071
 Content-Type: application/json
 Accept: application/json
 
 {
   "rep_uuid": "22dfa2fc-8b17-40bf-b9ca-cfca49f1aaf4",
-  "char_uuid": "1a02151e-fa31-42df-8a55-318c6dd69334",
+  "char_uuid": "13908407-cb74-4bd8-bb24-be207473b24f",
   "char_values": [
     {
-      "value_uuid": "5f8b56f9-d9f5-41a8-9382-81b75096c292",
+      "value_uuid": "12894331-d28e-4d8b-a71a-4849dc47de04",
       "sort": 13
     },
     {
-      "value_uuid": "9600694b-7a4a-4f0e-9f8b-c12a6b0645d0",
+      "value_uuid": "00ed2ea1-0b08-4dd8-99ae-0f11720fb97a",
       "sort": 34
     }
   ],
   "settings": {
     "rowId": 0,
-    "rowOrder": 0,
-    "types": [
-      "apartment"
-    ]
+    "rowOrder": 0
   }
 }
 

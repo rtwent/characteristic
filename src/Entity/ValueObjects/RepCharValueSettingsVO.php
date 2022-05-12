@@ -29,28 +29,16 @@ final class RepCharValueSettingsVO implements ToArray
      * @Groups({"repCharValues"})
      */
     private int $rowOrder;
-    /**
-     * @OA\Property(
-     *      type="array",
-     *      @OA\Items(
-     *          ref="#/components/schemas/RealtyTypeEnum"
-     *      )
-     * )
-     * @Groups({"repCharValues"})
-     */
-    private RealtyTypesCollection $realtyTypes;
 
     /**
      * RepCharValueSettingsVO constructor.
      * @param int $rowId
      * @param int $rowOrder
-     * @param RealtyTypesCollection $realtyTypes
      */
-    public function __construct(int $rowId, int $rowOrder, RealtyTypesCollection $realtyTypes)
+    public function __construct(int $rowId, int $rowOrder)
     {
         $this->rowId = $rowId;
         $this->rowOrder = $rowOrder;
-        $this->realtyTypes = $realtyTypes;
     }
 
     public function toArray(): array
@@ -58,7 +46,6 @@ final class RepCharValueSettingsVO implements ToArray
         return [
             'rowId' => $this->rowId,
             'rowOrder' => $this->rowOrder,
-            'types' => $this->realtyTypes->getArrayCopy()
         ];
     }
 
@@ -86,14 +73,5 @@ final class RepCharValueSettingsVO implements ToArray
     {
         return $this->rowOrder;
     }
-
-    /**
-     * @return RealtyTypesCollection
-     */
-    public function getRealtyTypes(): RealtyTypesCollection
-    {
-        return $this->realtyTypes;
-    }
-
 
 }

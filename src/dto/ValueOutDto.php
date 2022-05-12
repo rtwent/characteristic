@@ -59,7 +59,7 @@ final class ValueOutDto
      *          ref="#/components/schemas/RealtyTypeEnum"
      *      )
      * )
-     * @Groups({"repCharValues", "char:item:read"})
+     * @Groups({"char:item:read"})
      */
     private array $onlyType;
 

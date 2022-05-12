@@ -59,14 +59,7 @@ class RepresentationValuesCreate extends AbstractServiceValidator
                 new Assert\Type('array'),
                 new Assert\Collection([
                     'rowId' => new Assert\Type('integer'),
-                    'rowOrder' => new Assert\Type('integer'),
-                    'types' => [
-                        new Assert\Type('array'),
-                        new Assert\All([
-                            new Assert\Type('string'),
-                            new Assert\Choice(RealtyTypeEnum::values())
-                        ])
-                    ]
+                    'rowOrder' => new Assert\Type('integer')
                 ])
             ]),
             'char_values' => new Assert\Required([

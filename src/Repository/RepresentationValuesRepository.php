@@ -78,12 +78,23 @@ class RepresentationValuesRepository extends ServiceEntityRepository
      */
     private function mutateEntity(RepresentationValues $entity, UpsertCharValuesDto $dto): void
     {
-        $representation = $this->getEntityManager()->getRepository(Representation::class)
-            ->findOrFail($dto->getRepresentation());
-        $characteristic = $this->getEntityManager()->getRepository(Characteristics::class)
-            ->findOrFail($dto->getCharacteristic());
-        $entity->setRepresentation($representation);
-        $entity->setCharacteristic($characteristic);
+        $isUpdate = true;
+        try {
+            $entity->getId();
+        } catch (\Throwable $e) {
+            $isUpdate = false;
+        }
+
+        if(!$isUpdate) {
+            $representation = $this->getEntityManager()->getRepository(Representation::class)
+                ->findOrFail($dto->getRepresentation());
+            $entity->setRepresentation($representation);
+
+            $characteristic = $this->getEntityManager()->getRepository(Characteristics::class)
+                ->findOrFail($dto->getCharacteristic());
+            $entity->setCharacteristic($characteristic);
+        }
+
         $entity->setRepCharValues(new RepCharValuesCollectionVO($dto->getRepCharValues()->getArrayCopy()));
         $entity->setSettings($dto->getSettings());
 
@@ -91,7 +102,7 @@ class RepresentationValuesRepository extends ServiceEntityRepository
 
         if (count($errors) > 0) {
             $message = "";
-            foreach ($errors as $key => $error) {
+            foreach ($errors as $error) {
                 $message .= $error->getMessage();
             }
             throw new WrongRequest($message, null, [], Response::HTTP_UNPROCESSABLE_ENTITY);

@@ -20,7 +20,7 @@ final class RepCharValuesCollectionDbType extends JsonbToArrayType
     /**
      * @param mixed $value
      * @param AbstractPlatform $platform
-     * @return I18nCharVO|mixed
+     * @return RepCharValuesCollectionVO
      * @throws ValueObjectConstraint
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)

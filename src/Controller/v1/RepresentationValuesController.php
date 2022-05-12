@@ -237,16 +237,9 @@ class RepresentationValuesController implements ValidatableRequest
 
         $settings = $requestArray['settings'] ?? [];
 
-        $realtyTypesCollection = new RealtyTypesCollection();
-        $realtyTypes = $settings['types'] ?? [];
-        foreach ($realtyTypes as $realtyType) {
-            $realtyTypesCollection->append($realtyType);
-        }
-
         $settingsVo = new RepCharValueSettingsVO(
             $settings['rowId'] ?? 0,
-            $settings['rowOrder'] ?? 0,
-            $realtyTypesCollection
+            $settings['rowOrder'] ?? 0
         );
 
         return new UpsertCharValuesDto(

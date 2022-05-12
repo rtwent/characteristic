@@ -16,23 +16,15 @@ final class RepCharValuesSettingsDbType extends JsonbToArrayType
     /**
      * @param mixed $value
      * @param AbstractPlatform $platform
-     * @return RepCharValueSettingsVO|mixed
-     * @throws ValueObjectConstraint
+     * @return RepCharValueSettingsVO
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $decoded = json_decode($value, true);
 
-        $realtyTypes = $decoded['types'] ?? [];
-        $realtyTypeCollection = new RealtyTypesCollection();
-        foreach ($realtyTypes as $realtyType) {
-            $realtyTypeCollection->append($realtyType);
-        }
-
         return new RepCharValueSettingsVO(
             $decoded['rowId'] ?? 0,
-            $decoded['rowOrder'] ?? 0,
-            $realtyTypeCollection
+            $decoded['rowOrder'] ?? 0
         );
 
     }
