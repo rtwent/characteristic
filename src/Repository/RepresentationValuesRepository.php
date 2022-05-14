@@ -46,6 +46,9 @@ class RepresentationValuesRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * @throws ValueObjectConstraint
+     */
     public function update(int $id, UpsertCharValuesDto $dto): RepCharValuesOutDto
     {
         $entity = $this->findOrFail($id);

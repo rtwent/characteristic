@@ -114,6 +114,7 @@ class RepresentationValues
 
         $repValuesCollection = [];
         $allCharValues = $this->getCharacteristic()->getValues();
+
         $allCharValues->map(function (Values $allCharValue) use ($repValuesUuidsSorted, &$repValuesCollection) {
             if (isset($repValuesUuidsSorted[strval($allCharValue->getId())])) {
                 $offset = $repValuesUuidsSorted[strval($allCharValue->getId())];

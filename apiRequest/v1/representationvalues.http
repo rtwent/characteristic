@@ -5,7 +5,7 @@ Accept: application/json
 
 {
   "rep_uuid": "00f1e3d2-7c76-429c-ad6e-0c0d87642505",
-  "char_uuid": "13908407-cb74-4bd8-bb24-be207473b24f",
+  "char_uuid": "1a02151e-fa31-42df-8a55-318c6dd69334",
   "char_values": [
     {
       "value_uuid": "00ed2ea1-0b08-4dd8-99ae-0f11720fb97a",
@@ -37,7 +37,11 @@ Accept: application/json
     },
     {
       "value_uuid": "00ed2ea1-0b08-4dd8-99ae-0f11720fb97a",
-      "sort": 34
+      "sort": 30
+    },
+    {
+      "value_uuid": "80b2bd55-f228-4d2e-9028-21ca528c9634",
+      "sort": 37
     }
   ],
   "settings": {

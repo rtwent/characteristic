@@ -12,7 +12,10 @@ use App\Services\ValidationServices\AbstractServiceValidator;
 use App\Services\ValidationServices\CustomValidators\CharacteristicExists;
 use App\Services\ValidationServices\CustomValidators\RepresentationExists;
 use App\Services\ValidationServices\CustomValidators\ValueExists;
+use App\Services\ValidationServices\CustomValidators\ValueExistsInCharacteristic;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class RepresentationValuesCreate extends AbstractServiceValidator
@@ -22,14 +25,19 @@ class RepresentationValuesCreate extends AbstractServiceValidator
      * @var EntityManagerInterface
      */
     private EntityManagerInterface $entityManager;
+    /**
+     * @var RequestStack
+     */
+    private RequestStack $request;
 
     /**
      * StoreStepsValidation constructor.
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $request)
     {
         $this->entityManager = $entityManager;
+        $this->request = $request;
         parent::__construct();
     }
 
@@ -38,6 +46,13 @@ class RepresentationValuesCreate extends AbstractServiceValidator
      */
     public function rule(): Assert\Collection
     {
+        try {
+            $characteristicValue = json_decode($this->request->getCurrentRequest()->getContent(), true);
+            $charUuid = $characteristicValue['char_uuid'] ?? '';
+        } catch (\Throwable $e) {
+            $charUuid = '';
+        }
+
         return new Assert\Collection([
             'rep_uuid' => new Assert\Required([
                 // otherwise all validation rules will take part at the same time, generating db error at RepresentationExists()
@@ -74,7 +89,8 @@ class RepresentationValuesCreate extends AbstractServiceValidator
                             'value_uuid' => [
                                 new Assert\Type('string'),
                                 new Assert\Regex('/[0-9a-f]{8}-[0-9a-f]{4}-[4][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/'),
-                                new ValueExists(['entityManager' => $this->entityManager])
+                                new ValueExists(['entityManager' => $this->entityManager]),
+                                new ValueExistsInCharacteristic(['entityManager' => $this->entityManager, 'args' => $charUuid])
                             ]
                         ])
                     ])

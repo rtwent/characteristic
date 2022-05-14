@@ -22,6 +22,12 @@ abstract class ConstraintWithEntityManager extends Constraint
     private EntityManagerInterface $entityManager;
 
     /**
+     * Arguments that can be used in validators
+     * @var mixed
+     */
+    private mixed $args = null;
+
+    /**
      * ServiceExists constructor.
      * @param $options
      */
@@ -29,6 +35,10 @@ abstract class ConstraintWithEntityManager extends Constraint
     {
         if (isset($options['entityManager']) && $options['entityManager'] instanceof EntityManagerInterface) {
             $this->entityManager = $options['entityManager'];
+        }
+
+        if (isset($options['args'])) {
+            $this->args = $options['args'];
         }
 //        unset($options['entityManager']);
 //        parent::__construct($options);
@@ -41,4 +51,14 @@ abstract class ConstraintWithEntityManager extends Constraint
     {
         return $this->entityManager;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getArgs(): mixed
+    {
+        return $this->args;
+    }
+
+
 }

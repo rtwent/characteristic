@@ -11,10 +11,12 @@ use App\Interfaces\ValidatableRequest;
 use App\Services\ValidationServices\Characteristics\CharacteristicCreate;
 use App\Services\ValidationServices\MeasurementUnits\MeasurementUnitsCreate;
 use App\Services\ValidationServices\RepresentationValues\RepresentationValuesCreate;
+use App\Services\ValidationServices\RepresentationValues\RepresentationValuesUpdate;
 use App\Services\ValidationServices\Values\ValuesCreate;
 use ReflectionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
@@ -31,31 +33,31 @@ class ValidateRequest implements EventSubscriberInterface
     private array $validators = [
         'v1_characteristics_create' => [
             'class' => CharacteristicCreate::class,
-            'validatorArguments' => [],
+            'validatorArguments' => ['entityManager'],
         ],
         'v1_characteristics_update' => [
             'class' => CharacteristicCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager']
         ],
         'v1_values_create' => [
             'class' => ValuesCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager']
         ],
         'v1_representation_values_insert' => [
             'class' => RepresentationValuesCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager', 'request']
         ],
         'v1_representation_values_update' => [
             'class' => RepresentationValuesCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager', 'request']
         ],
         'v1_units_create' => [
             'class' => MeasurementUnitsCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager']
         ],
         'v1_units_update' => [
             'class' => MeasurementUnitsCreate::class,
-            'validatorArguments' => []
+            'validatorArguments' => ['entityManager']
         ],
 
         // injecting entity manager example (beta version made by hand in self::onArgumentsCheck())
@@ -68,10 +70,12 @@ class ValidateRequest implements EventSubscriberInterface
     private array $initializedArguments = ['entityManager'];
 
     private EntityManagerInterface $entityManager;
+    private RequestStack $request;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $request)
     {
         $this->initializedArguments['entityManager'] = $entityManager;
+        $this->initializedArguments['request'] = $request;
     }
 
     /**
@@ -87,7 +91,7 @@ class ValidateRequest implements EventSubscriberInterface
 
     /**
      * @param ControllerArgumentsEvent $event
-     * @throws ReflectionException|InvalidArgument
+     * @throws ReflectionException
      */
     public function onArgumentsCheck(ControllerArgumentsEvent $event): void
     {
@@ -115,7 +119,8 @@ class ValidateRequest implements EventSubscriberInterface
         foreach ($this->validators[$route]['validatorArguments'] as $argument) {
             $validatorArguments[] = $this->initializedArguments[$argument];
         }
-        $validatorArguments['entityManager'] = $this->initializedArguments['entityManager'];
+        //$validatorArguments['entityManager'] = $this->initializedArguments['entityManager'];
+        //$validatorArguments['request'] = $this->initializedArguments['request'];
         $validator = $r->newInstanceArgs($validatorArguments);
 
         if ($request->isMethod(Request::METHOD_GET)) {
